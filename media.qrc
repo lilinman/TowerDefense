@@ -1,0 +1,23 @@
+<RCC>
+    <qresource prefix="/pics">
+        <file>imgs/背景.png</file>
+        <file>imgs/1红色小怪物.png</file>
+        <file>imgs/2粉色小怪物.png</file>
+        <file>imgs/3蓝色小怪物.png</file>
+        <file>imgs/4绿色小怪物.png</file>
+        <file>imgs/5黄色小怪物.png</file>
+        <file>imgs/地砖1.png</file>
+        <file>imgs/地砖2.png</file>
+        <file>imgs/粉色云.png</file>
+        <file>imgs/蓝色云1.png</file>
+        <file>imgs/蓝色云2.png</file>
+        <file>imgs/绿瓶1.png</file>
+        <file>imgs/绿瓶炮弹1.png</file>
+        <file>imgs/热气球.png</file>
+        <file>imgs/太阳花1.png</file>
+        <file>imgs/太阳花2.png</file>
+        <file>imgs/太阳花攻击效果1.png</file>
+        <file>imgs/太阳花攻击效果2.png</file>
+        <file>imgs/云朵炮台.png</file>
+    </qresource>
+</RCC>
