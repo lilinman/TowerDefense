@@ -19,10 +19,11 @@ private:
 public:
     Enemy(Point pointar[],int len,int x,int y,int id);
     void Draw(QPainter &painter) const;
-    bool Move();
+    void Move();
     int get_Id() const;
     int get_Hp() const;
     void set_Hp(int a);
+    vector<Point> getway() const;
 
 };
 

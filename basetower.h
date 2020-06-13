@@ -26,6 +26,7 @@ protected:
     Bullet *bullet=NULL;         //子弹
 
 public:
+    void attack();
     Enemy *get_Target() const;
     void set_Target(Enemy *t);
     void CreatBullet();             //新建子弹
@@ -35,10 +36,10 @@ public:
     void set_Damege(int) ;
     int get_Range() const;
     void set_Range(int);
-    Bullet* get_bullet()const;
     void set_Bullet(Bullet *);
     int get_BulletID()const;
     void set_BulletID(int);
-    void del_Bullet();
+    Bullet * get_Bullet()const;
+
 };
 #endif // BASETOWER_H

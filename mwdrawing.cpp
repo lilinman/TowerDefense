@@ -3,34 +3,37 @@
 #include <QLabel>
 #include <QTime>
 #include<QTimer>
-#include"enemy.h"
-#include"basetower.h"
-
+#include"mainwindow.h"
 void MainWindow::DrawTower(QPainter& painter)
 {
     for(auto e=TowerVec.begin();e!=TowerVec.end();e++)
-               (*e)->Draw(painter);
-}
+    {
+        (*e)->Draw(painter);
+    }
 
+}
+void MainWindow::DrawTowerpos(QPainter& painter){
+    for(auto tp:TposVec)
+    {
+        tp->Draw(painter);
+    }
+}
 void MainWindow::DrawEnemy(QPainter& painter)
 {
     if(EnemyVec.empty())
         return;
     for(auto e=EnemyVec.begin();e!=EnemyVec.end();e++)
-        if((*e)->get_Hp()>0)
-               (*e)->Draw(painter);
-
-    for (auto e = EnemyVec.begin(); e != EnemyVec.end(); e++){
-      //if(!upd_bullet)
-        if((*e)->Move()||(*e)->get_Hp()<=0) //怪物走到终点 或没血
-        {
-            delete *e;
-            EnemyVec.erase(e);         //怪物走到终点则删除这个怪物
-            break;
-        }
-
+    {
+        (*e)->Draw(painter);
+        if(!update_bullet)
+               (*e)->Move();        
     }
-
+}
+void MainWindow::DrawBullet(QPainter& painter){
+    for(auto t:TowerVec){
+        if(t->get_Bullet()!=NULL)
+            t->get_Bullet()->Draw(painter);
+    }
 }
 void MainWindow::DrawMapArr(QPainter& painter)
 {
@@ -45,14 +48,14 @@ void MainWindow::DrawMapArr(QPainter& painter)
         0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
         0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,1,1,1,1,1,0,
         0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 1,1,1,1,1,1,0,
-        0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,1,0,0,0,0,0,
+        0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,1,0,0,0,0,0,
         0, 0, 0, 1, 1, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,1,0,0,0,0,0,
         0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,0,0,0,0,0,
         0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,0,0,0,0,0,
         0, 0, 0, 1, 1, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 1, 1, 0, 9, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
         0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 6, 0,0,0,0,0,0,0,
-        0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
-        0, 0, 0, 1, 1, 1, 1, 1, 1, 9, 0, 0, 9, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
+        0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
+        0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
         0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
         0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
         0, 2, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
@@ -67,11 +70,11 @@ void MainWindow::DrawMapArr(QPainter& painter)
             {
             case 1:     /*地面*/
                 painter.drawPixmap(i * imgSIZE, j * imgSIZE, imgSIZE, imgSIZE,
-                    QPixmap(":/pics/imgs/地砖2.png"));
+                    QPixmap(":/pics/imgs/地砖4.png"));
                 break;
             case 2:     /*蓝色云1*/
                 painter.drawPixmap(i * imgSIZE, j * imgSIZE, imgSIZE*3, imgSIZE*2,
-                    QPixmap(":/pics/imgs/蓝色云1.png"));
+                    QPixmap(":/pics/imgs/蓝色云.png"));
                 break;
             case 3:     /*蓝色云2*/
                 painter.drawPixmap(i * imgSIZE, j * imgSIZE, imgSIZE*4, imgSIZE*2,
@@ -89,11 +92,9 @@ void MainWindow::DrawMapArr(QPainter& painter)
                 painter.drawPixmap(i * imgSIZE, j * imgSIZE, imgSIZE*6, imgSIZE*8,
                     QPixmap(":/pics/imgs/热气球.png"));
                 break;
-            case 9:
-//                QPen blackline((Qt::black),2.5);
-//                painter.drawRect(i*imgSIZE, j*imgSIZE, imgSIZE*2 , imgSIZE*2);
-                painter.drawPixmap(i * imgSIZE, j * imgSIZE, imgSIZE*2, imgSIZE*2,
-                    QPixmap(":/pics/imgs/云朵炮台.png"));
+//            case 9:
+//                painter.drawPixmap(i * imgSIZE, j * imgSIZE, imgSIZE*2, imgSIZE*2,
+//                    QPixmap(":/pics/imgs/地砖3.png"));
                 break;
             }
         }

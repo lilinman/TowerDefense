@@ -32,7 +32,8 @@ SOURCES += \
     mwdrawing.cpp \
     basetower.cpp \
     towerpos.cpp \
-    bullet.cpp
+    bullet.cpp \
+    selection.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -41,10 +42,12 @@ HEADERS += \
     enemy.h \
     basetower.h \
     towerpos.h \
-    bullet.h
+    bullet.h \
+    selection.h
 
 FORMS += \
         mainwindow.ui
 
 RESOURCES += \
+    media.qrc \
     media.qrc

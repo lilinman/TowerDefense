@@ -9,6 +9,7 @@ MainWindow::MainWindow(QWidget *parent) :
     timerId1 = startTimer(120);
     timerId2 = startTimer(1800);
     timerId3 = startTimer(50);
+    InitalGame();//初始化游戏
 }
 
 MainWindow::~MainWindow()
@@ -31,8 +32,10 @@ void MainWindow::paintEvent(QPaintEvent *)
     QPainter painter(this);     //创建画家类
     painter.setRenderHint(QPainter::Antialiasing);    //设置抗锯齿
     DrawMapArr(painter);        //画出地图
+    DrawTowerpos(painter);
     DrawTower(painter);
     DrawEnemy(painter);
+    DrawBullet(painter);
 
 }
 
@@ -42,13 +45,19 @@ void MainWindow::timerEvent(QTimerEvent *e) {
     int id = e->timerId();
     if (inGame)
     {
-
         if(id == timerId2)
             CreatEnemyWave();
 
         if(id == timerId1)
         {
-            //upd_bullet=false;
+            update_bullet=false;
+            Checkenemy();
+            repaint();
+        }
+        if(id==timerId3)
+        {
+            update_bullet=true;
+            Tower_creatbullet();
             repaint();
         }
 

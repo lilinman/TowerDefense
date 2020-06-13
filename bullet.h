@@ -3,6 +3,7 @@
 #include"object.h"
 #include<QPainter>
 #include "point.h"
+
 class Enemy;
 class Bullet: virtual public Object
 {

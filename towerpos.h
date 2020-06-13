@@ -1,21 +1,30 @@
 #ifndef TOWERPOS_H
 #define TOWERPOS_H
+#include<QPainter>
 #include "point.h"
 #include"basetower.h"
-class TowerPos
+#include"selection.h"
+#include"object.h"
+class TowerPos:virtual public Object
 {
 public:
     TowerPos(Point p);
 private:
     bool HasTower;
-    Point position;
     BaseTower* myTower;
-private:
+    Selection* selectbox;
+
+public:
+    int get_X() const;
+    int get_Y() const;
     Point get_Cpoint()const;
     bool get_hasTower()const;
     BaseTower* get_myTower()const;
     void set_hasTower(bool);
     void set_myTower(BaseTower*);
+    void Draw(QPainter &painter) const;
+    Selection* get_selectbox()const;
+    //void set_selectionbox(Selection*);
 };
 
 #endif // TOWERPOS_H

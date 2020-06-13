@@ -33,13 +33,17 @@ private:
     vector<BaseTower*> TowerVec;      //防御塔数组
     vector<TowerPos *> TposVec;     //防御塔坑数组
     bool inGame;
+    int playerhp=10;
     int a=10;
     int count = 0;    //敌人计数器
     int timerId1; //第1个时间控制器，刷新
     int timerId2; //第2个 产生敌人
     int timerId3; //第3个 产生子弹
+    bool update_bullet;
 protected:
-    void initalGame();//游戏初始化
+    void DrawTowerpos(QPainter&);
+    void Checkenemy();
+    void InitalGame();//游戏初始化
     bool CreatTower(int mx,int my);
     void Tower_creatbullet();
     void CreatEnemyWave();
