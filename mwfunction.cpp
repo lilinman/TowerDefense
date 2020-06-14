@@ -7,11 +7,12 @@
 #include"basetower.h"
 #include"bullet.h"
 #include"towerpos.h"
-void MainWindow::InitalGame(){
+#include"playscene.h"
+void PlayScene::InitalGame(){
 //实现不同关卡初始化
 //防御塔坑 怪物路径vector
     vector<Point> towerPosition={
-        Point(6,7),Point(6,10),
+        Point(6,8),
         Point(11,12),
         Point(16,10),Point(22,10),
         Point(24,5)
@@ -24,7 +25,7 @@ void MainWindow::InitalGame(){
     }
 
 }
-void MainWindow::Checkenemy(){
+void PlayScene::Checkenemy(){
     for(auto e =EnemyVec.begin();e!=EnemyVec.end();e++)
     {
         if((*e)->get_Hp()<=0){
@@ -51,7 +52,7 @@ void MainWindow::Checkenemy(){
         }
     }
 }
-bool MainWindow::CreatTower(int mx,int my)
+bool PlayScene::CreatTower(int mx,int my)
 {
 
     //遍历防御塔坑位置 创造防御塔
@@ -78,51 +79,31 @@ bool MainWindow::CreatTower(int mx,int my)
         if(tp->get_selectbox()->get_isshow()&&!tp->get_hasTower())//有选择框 没有塔 选择建塔
         {
             int id=tp->get_selectbox()->checkbox(mx,my);  //选择框循环 返回选择结果
-            if(id!=0){                                 //id不为0 选中建立防御塔
+            if(id!=0&&id!=4){                                 //id不为0 选中建立防御塔
                 TowerVec.push_back(new BaseTower(tp->get_X(),tp->get_Y(),id));
                 tp->set_hasTower(true);
                 tp->set_myTower(TowerVec.back());
                 tp->get_selectbox()->set_isshow(false);//选择框消失
-                return true;
             }
+            tp->get_selectbox()->set_isshow(false);//选择框消失
         }
 
-        }
 
-//        if (tp->get_Cpoint().is_include(Point(mx,my),30)&&!tp->get_hasTower())
-//        {
+    }
 
-//                TowerVec.push_back(new BaseTower(tp->get_X(),tp->get_Y(),1));
-//                tp->set_hasTower(true);
-//                tp->set_myTower(TowerVec.back());
-//                return true;
-//        }
-//
-//    vector<Point> towerPosition={
-//        Point(6,7),Point(6,10),
-//        Point(9,13),Point(12,13),
-//        Point(16,10),Point(22,10),
-//        Point(24,5)
-//    };
-//    //遍历防御塔位置 创造防御塔
-//    for(auto tp=towerPosition.begin(); tp != towerPosition.end(); tp++){
-//        if ((mx < (tp->x+2)*imgSIZE) && (mx >=tp->x*imgSIZE) && (my<(tp->y+2)*imgSIZE) &&(my>=tp->y*imgSIZE)){
-//                TowerVec.push_back(new BaseTower(tp->x*imgSIZE,tp->y*imgSIZE,1));
-//        }
-//    }
     return false;
 }
 
-void MainWindow::CreatEnemy(Point waypoint[], int len, int x, int y,int id)
+void PlayScene::CreatEnemy(Point waypoint[], int len, int x, int y,int id)
 {
     EnemyVec.push_back(new Enemy(waypoint,len,x,y,id));//新建敌人
 }
 
-void MainWindow::CreatEnemyWave(){
+void PlayScene::CreatEnemyWave(){
     Point  Path[]={
-                    Point(21*positionSIZE,11*positionSIZE),//第一个节点
-                    Point(7*positionSIZE,11*positionSIZE),//第二个节点
-                    Point(7*positionSIZE,34*positionSIZE),//第三个节点
+
+                    Point(8*positionSIZE,11*positionSIZE),//第二个节点
+                    Point(8*positionSIZE,34*positionSIZE),//第三个节点
                     Point(21*positionSIZE,34*positionSIZE),//第四个节点
                     Point(21*positionSIZE,44*positionSIZE),//第五个节点
                     Point(43*positionSIZE,44*positionSIZE),//第六个节点
@@ -134,18 +115,18 @@ void MainWindow::CreatEnemyWave(){
                     Point(95*positionSIZE,8*positionSIZE)//终点
                    };
 
-    Point startpoint(21*positionSIZE,0);//起点
+    Point startpoint(0*positionSIZE,11*positionSIZE);//起点
 
     if(count>=0&&count<=5)
-        CreatEnemy(Path,12,startpoint.x,startpoint.y,1);
+        CreatEnemy(Path,11,startpoint.x,startpoint.y,1);
      if(count>=6&&count<=12)
-        CreatEnemy(Path,12,startpoint.x,startpoint.y,2);
+        CreatEnemy(Path,11,startpoint.x,startpoint.y,2);
 
      count++;
 
  }
 
- void MainWindow::Tower_creatbullet()
+void PlayScene::Tower_creatbullet()
  {
      if(TowerVec.empty())
          return;

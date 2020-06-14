@@ -33,7 +33,10 @@ SOURCES += \
     basetower.cpp \
     towerpos.cpp \
     bullet.cpp \
-    selection.cpp
+    selection.cpp \
+    mypushbutton.cpp \
+    chooselevelscene.cpp \
+    playscene.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -43,11 +46,14 @@ HEADERS += \
     basetower.h \
     towerpos.h \
     bullet.h \
-    selection.h
+    selection.h \
+    mypushbutton.h \
+    chooselevelscene.h \
+    playscene.h
 
 FORMS += \
         mainwindow.ui
 
 RESOURCES += \
-    media.qrc \
     media.qrc
+

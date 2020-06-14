@@ -8,8 +8,8 @@ BaseTower::BaseTower(int x,int y,int id):
         damege=10;
         range=150;
         t_speed=5;
-        set_WH(60,60);
-        set_Imgpath(":/pics/imgs/炮塔1.png");
+        set_WH(30,30);
+        set_Imgpath(":/pics/imgs/炮塔1.1.png");
         break;
     case 2:
         bulletId = 21;

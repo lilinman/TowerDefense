@@ -4,7 +4,8 @@
 #include <QTime>
 #include<QTimer>
 #include"mainwindow.h"
-void MainWindow::DrawTower(QPainter& painter)
+#include"playscene.h"
+void PlayScene::DrawTower(QPainter& painter)
 {
     for(auto e=TowerVec.begin();e!=TowerVec.end();e++)
     {
@@ -12,13 +13,15 @@ void MainWindow::DrawTower(QPainter& painter)
     }
 
 }
-void MainWindow::DrawTowerpos(QPainter& painter){
+
+void PlayScene::DrawTowerpos(QPainter& painter){
     for(auto tp:TposVec)
     {
         tp->Draw(painter);
     }
 }
-void MainWindow::DrawEnemy(QPainter& painter)
+
+void PlayScene::DrawEnemy(QPainter& painter)
 {
     if(EnemyVec.empty())
         return;
@@ -29,26 +32,28 @@ void MainWindow::DrawEnemy(QPainter& painter)
                (*e)->Move();        
     }
 }
-void MainWindow::DrawBullet(QPainter& painter){
+
+void PlayScene::DrawBullet(QPainter& painter){
     for(auto t:TowerVec){
         if(t->get_Bullet()!=NULL)
             t->get_Bullet()->Draw(painter);
     }
 }
-void MainWindow::DrawMapArr(QPainter& painter)
+
+void PlayScene::DrawMapArr(QPainter& painter)
 {
     painter.drawPixmap(0, 0, imgSIZE*per_WIDTH, imgSIZE*per_HEIGHT,
         QPixmap(":/pics/imgs/背景.png"));
     //地图数组
     int Map[per_HEIGHT][per_WIDTH] =
     {
-        0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
-        0, 4, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
-        0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0,0,0,0,0,0,0,
-        0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
-        0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,1,1,1,1,1,0,
-        0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 1,1,1,1,1,1,0,
-        0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,1,0,0,0,0,0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
+        0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0,0,0,0,0,0,0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,0,0,0,0,0,0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,1,1,1,1,1,0,
+        1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 1,1,1,1,1,1,0,
+        1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,1,0,0,0,0,0,
         0, 0, 0, 1, 1, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,1,0,0,0,0,0,
         0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,0,0,0,0,0,
         0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1,1,0,0,0,0,0,
@@ -91,10 +96,6 @@ void MainWindow::DrawMapArr(QPainter& painter)
             case 6:     /*热气球*/
                 painter.drawPixmap(i * imgSIZE, j * imgSIZE, imgSIZE*6, imgSIZE*8,
                     QPixmap(":/pics/imgs/热气球.png"));
-                break;
-//            case 9:
-//                painter.drawPixmap(i * imgSIZE, j * imgSIZE, imgSIZE*2, imgSIZE*2,
-//                    QPixmap(":/pics/imgs/地砖3.png"));
                 break;
             }
         }

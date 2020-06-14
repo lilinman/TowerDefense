@@ -17,7 +17,7 @@ void Selection::Draw1(QPainter &painter) const{
     painter.drawEllipse(QPointF(mx, my), range, range);
 
     painter.drawPixmap(box[0].x-25, box[0].y-25 ,50, 50,
-            QPixmap(":/pics/imgs/炮塔1.png"));
+            QPixmap(":/pics/imgs/炮塔1.1.png"));
     painter.drawPixmap(box[1].x-25, box[1].y-25 ,50, 50,
             QPixmap(":/pics/imgs/炮塔2.png"));
     painter.drawPixmap(box[2].x-25, box[2].y-25 ,50, 50,
