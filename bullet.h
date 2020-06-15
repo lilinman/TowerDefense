@@ -5,7 +5,7 @@
 #include "point.h"
 
 class Enemy;
-class Bullet: virtual public Object
+class Bullet: public Object
 {
 protected:
     Enemy *target=NULL;  //目标敌人
@@ -14,10 +14,11 @@ public:
     Bullet(int x,int y,int id,Enemy *e);
     bool shoot();            //是否打到敌人
     bool inborder();        //判断是否在窗口内
-    void Draw(QPainter &painter) const;
-    void Move();
+    virtual void Move();  //不同的子弹需自己实现移动
     Enemy* get_target()const;
-    void set_target(Enemy *e) ;
+    void set_target(Enemy *e);
+    void Draw(QPainter &painter) const;
+    ~Bullet();
 };
 
 #endif // BULLET_H

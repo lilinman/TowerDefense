@@ -89,4 +89,6 @@ Enemy* Bullet::get_target()const{
 void Bullet::set_target(Enemy* e){
     target=e;
 }
+Bullet::~Bullet(){
 
+}

@@ -17,9 +17,11 @@ using namespace std;
 #include "mypushbutton.h"
 #include"chooselevelscene.h"
 const int positionSIZE=10;
-const int imgSIZE=30; //图片缩放比例
-const int per_WIDTH=35;//35*30画面宽
-const int per_HEIGHT=20;//20*30画面高
+const int posX=400;
+const int posY=150;
+const int imgSIZE=40; //图片缩放比例
+const int per_WIDTH=28;//30*30画面宽
+const int per_HEIGHT=18;//20*30画面高
 const int SIZEwid=imgSIZE*per_WIDTH;
 const int SIZEhei=per_HEIGHT*imgSIZE;
 

@@ -5,7 +5,7 @@
 #include"basetower.h"
 #include"selection.h"
 #include"object.h"
-class TowerPos:virtual public Object
+class TowerPos: public Object
 {
 public:
     TowerPos(Point p);
@@ -15,6 +15,7 @@ private:
     Selection* selectbox;
 
 public:
+     void Draw(QPainter &painter) const;
     int get_X() const;
     int get_Y() const;
     Point get_Cpoint()const;
@@ -22,7 +23,6 @@ public:
     BaseTower* get_myTower()const;
     void set_hasTower(bool);
     void set_myTower(BaseTower*);
-    void Draw(QPainter &painter) const;
     Selection* get_selectbox()const;
     //void set_selectionbox(Selection*);
 };

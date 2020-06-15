@@ -36,7 +36,11 @@ SOURCES += \
     selection.cpp \
     mypushbutton.cpp \
     chooselevelscene.cpp \
-    playscene.cpp
+    playscene.cpp \
+    tower1.cpp \
+    flowerbullet.cpp \
+    tower2.cpp \
+    tower3.cpp
 
 HEADERS += \
         mainwindow.h \
@@ -49,7 +53,11 @@ HEADERS += \
     selection.h \
     mypushbutton.h \
     chooselevelscene.h \
-    playscene.h
+    playscene.h \
+    tower1.h \
+    flowerbullet.h \
+    tower2.h \
+    tower3.h
 
 FORMS += \
         mainwindow.ui

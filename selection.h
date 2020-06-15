@@ -3,6 +3,7 @@
 #include<QPainter>
 #include "point.h"
 #include<vector>
+#include"basetower.h"
 using namespace std;
 class Selection
 {
@@ -17,7 +18,7 @@ private:
 public:
     int checkbox(int x,int y);
     void Draw1(QPainter &painter) const;
-    void Draw2(QPainter &painter) const;
+    void Draw2(QPainter &painter,BaseTower *) const;
     bool get_isshow()const;
     void set_isshow(bool b);
     void set_pattern(int );

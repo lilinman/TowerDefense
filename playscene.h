@@ -36,6 +36,7 @@ private:
 protected:
     void DrawTowerpos(QPainter&);
     void Checkenemy();
+    void CheckTower();
     void InitalGame();//游戏初始化
     bool CreatTower(int mx,int my);
     void Tower_creatbullet();

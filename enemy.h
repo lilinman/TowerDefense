@@ -8,7 +8,7 @@ using namespace std;
 #include"object.h"
 #include<QPainter>
 //敌人类
-class Enemy: virtual public Object
+class Enemy: public Object
 {
 private:
     int hp;                 //生命值
@@ -24,6 +24,7 @@ public:
     int get_Hp() const;
     void set_Hp(int a);
     vector<Point> getway() const;
+    ~Enemy();
 
 };
 

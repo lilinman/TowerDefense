@@ -6,9 +6,6 @@
         <file>imgs/怪兽3.png</file>
         <file>imgs/怪兽4.png</file>
         <file>imgs/芒果.png</file>
-        <file>imgs/炮塔2.png</file>
-        <file>imgs/炮塔3.png</file>
-        <file>imgs/炮台.png</file>
         <file>imgs/西瓜.png</file>
         <file>imgs/樱桃.png</file>
         <file>imgs/白球.png</file>
@@ -22,5 +19,16 @@
         <file>imgs/热气球.png</file>
         <file>imgs/粉色云.png</file>
         <file>imgs/炮塔1.1.png</file>
+        <file>imgs/炮塔1.2.png</file>
+        <file>imgs/炮塔1.3.png</file>
+        <file>imgs/炮塔2.1.png</file>
+        <file>imgs/炮塔2.2.png</file>
+        <file>imgs/炮塔2.3.png</file>
+        <file>imgs/炮塔2待买.png</file>
+        <file>imgs/炮塔3.1.png</file>
+        <file>imgs/炮塔3.2.png</file>
+        <file>imgs/炮塔3.3.png</file>
+        <file>imgs/炮塔3待买.png</file>
+        <file>imgs/炮塔1待买.png</file>
     </qresource>
 </RCC>

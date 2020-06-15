@@ -8,7 +8,7 @@ ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
 {
     //配置选择关卡信息
     //配置主场景
-    move(400,120);//窗口位置
+    move(posX,posY);//窗口位置
     setFixedSize(SIZEwid,SIZEhei);//窗口大小
     //设置图标
     setWindowIcon(QIcon(":/pics/imgs/怪兽2.png"));

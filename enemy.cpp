@@ -1,5 +1,5 @@
 #include "enemy.h"
-
+#include<QDebug>
 Enemy::Enemy(Point pointarr[],int len,int x, int y, int id) :
     Object(x,y),id(id)
 
@@ -35,10 +35,9 @@ Enemy::Enemy(Point pointarr[],int len,int x, int y, int id) :
     }
 }
 
-void Enemy::Draw(QPainter& painter) const{
+void Enemy::Draw(QPainter &painter) const{
     painter.drawPixmap(position_x, position_y, width, height,
         QPixmap(ImgPath));
-
 }
 //设定路径点移动
 void Enemy::Move()
@@ -94,4 +93,7 @@ void Enemy::set_Hp(int a){    //设置生命值
 }
 vector<Point> Enemy::getway() const{
     return waypoint;
+}
+Enemy::~Enemy(){
+     //qDebug()<<"删除enemy";
 }

@@ -2,6 +2,9 @@
 #define OBJECT_H
 
 #include<QString>
+#include<QPainter>
+
+//物体抽象类
 class Object{
 
 protected:
@@ -17,6 +20,8 @@ public:
     QString get_Imgpath() const;
     void set_Imgpath(QString s) ;
     void set_WH(int a,int b);
+    virtual void Draw(QPainter &painter) const =0;//纯虚函数
+    virtual ~Object();
 
 };
 

@@ -1,10 +1,11 @@
 #include "playscene.h"
 #include "mainwindow.h"
+#include<QDebug>
 PlayScene::PlayScene(int level)
 {
     Level=level;
     //配置
-    move(400,120);//窗口位置
+    move(posX,posY);//窗口位置
     setFixedSize(SIZEwid,SIZEhei);//窗口大小
     //设置图标
     setWindowIcon(QIcon(":/pics/imgs/怪兽2.png"));
@@ -18,7 +19,7 @@ PlayScene::PlayScene(int level)
     //返回按钮
     MyPushButton *backButton= new MyPushButton(40,40,":/pics/imgs/草莓.png");
     backButton->setParent(this);
-    backButton->move(900,20);
+    backButton->move(700,20);
     connect(backButton,&MyPushButton::clicked,[=]{
         //弹起特效
         backButton->zoom1();
@@ -32,6 +33,7 @@ PlayScene::PlayScene(int level)
 
 }
 void PlayScene::mousePressEvent(QMouseEvent *event){
+       //qDebug()<<"执行鼠标点击事件"<<endl;
         int mx=event->x();
         int my=event->y();
         if(CreatTower(mx,my))
@@ -43,10 +45,6 @@ void PlayScene::paintEvent(QPaintEvent *)
 
     QPainter painter(this);     //创建画家类
     painter.setRenderHint(QPainter::Antialiasing);    //设置抗锯齿
-
-    painter.drawPixmap(0, 0, imgSIZE*per_WIDTH, imgSIZE*per_HEIGHT,
-        QPixmap(":/pics/imgs/背景.png"));
-
     DrawMapArr(painter);        //画出地图
     DrawTowerpos(painter);
     DrawTower(painter);
@@ -68,6 +66,7 @@ void PlayScene::timerEvent(QTimerEvent *e) {
         {
             update_bullet=false;
             Checkenemy();
+            CheckTower();
             repaint();
         }
         if(id==timerId3)

@@ -1,5 +1,5 @@
 #include "object.h"
-
+#include<QDebug>
 Object::Object(int x, int y):position_x(x),position_y(y){}
 
 int Object::get_Height() const{
@@ -22,4 +22,8 @@ void Object::set_WH(int a,int b){
 }
 void Object::set_Imgpath(QString s){
     ImgPath=s;
+}
+
+Object::~Object(){
+   //qDebug()<<"删除object";
 }
