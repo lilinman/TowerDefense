@@ -2,14 +2,14 @@
 #include"mainwindow.h"
 #include<QDebug>
 
-Tower1::Tower1(int x,int y):Object(x,y),BaseTower(x,y)
+Tower1::Tower1(int x,int y): BaseTower(x,y)
 {
     double rate=1.8;
+    bulletspeed=9;
     TowerLevel=1;
     bulletId=11;
     damege=10;
     range=100;
-    t_speed=5;
     set_WH(rate*imgSIZE,rate*imgSIZE);
     set_Imgpath(":/pics/imgs/炮塔1.1.png");
 
@@ -22,11 +22,13 @@ void Tower1::upGrade()
 
     switch (TowerLevel) {
     case 1:
+        bulletspeed=8;
         range=150;
         set_Imgpath(":/pics/imgs/炮塔1.2.png");
         TowerLevel++;
         break;
     case 2:
+        bulletspeed=7;
         range=200;
         set_Imgpath(":/pics/imgs/炮塔1.3.png");
         TowerLevel++;
@@ -35,14 +37,15 @@ void Tower1::upGrade()
     }
 
 }
-void Tower1::attack(){
+void Tower1::attack(vector<Enemy *> EnemyVec){
     if(bullet->get_target()==NULL)
         return;
 
-    bullet->Move();
+    bullet->Move(ebuspeed);
     if(bullet->shoot()||bullet->get_target()->get_Hp()<=0)//如果目标敌人已经没有血也更新
     {
         bullet->get_target()->set_Hp(bullet->get_target()->get_Hp()-this->damege);//如果击中减少敌人血量
+        bullet->get_target()->set_isAttacked(true);//被攻击
         if(bullet->get_target()==this->target) //如果目标敌人是同一个
         {
             target=NULL;
@@ -68,10 +71,18 @@ void Tower1::attack(){
     return;
 }
 
-void Tower1::set_Bullet(int x,int y,bool b){
+void Tower1::set_Bullet(int ex,int ey,bool b){
+
 
     if(b){
-        bullet = new Bullet(x,y,bulletId,target);
+        int px=this->get_Target()->get_X()+this->get_Target()->get_Width()/2;//敌人中心点坐标
+        int py=this->get_Target()->get_Y()+this->get_Target()->get_Height()/2;
+        double dis=sqrt((ex-px)*(ex-px)+(ey-py)*(ey-py));
+        ebuspeed=dis/bulletspeed;
+
+        set_isbulleting(true);
+        this->set_WH(this->get_Width(),this->get_Height()+5);
+        bullet = new Bullet(ex,ey,bulletId,target);
     }
     else
         bullet=NULL;

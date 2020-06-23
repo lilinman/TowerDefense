@@ -7,9 +7,14 @@ class Tower2:public BaseTower
 public:
     Tower2(int,int);
     void upGrade();
-    void attack();
+    void attack(vector<Enemy *>);
     void set_Bullet(int,int,bool);
     ~Tower2();
+
+private:
+    int cutSpeed;
+    int tarNum;
+
 };
 
 #endif // TOWER2_H

@@ -1,6 +1,8 @@
 #include "playscene.h"
 #include "mainwindow.h"
 #include<QDebug>
+#include<QLabel>
+#include<QPalette>
 PlayScene::PlayScene(int level)
 {
     Level=level;
@@ -13,7 +15,7 @@ PlayScene::PlayScene(int level)
     setWindowTitle("游戏页面");
 
     timerId1 = startTimer(120);
-    timerId2 = startTimer(1800);
+    timerId2 = startTimer(1500);
     timerId3 = startTimer(50);
 
     //返回按钮
@@ -30,6 +32,37 @@ PlayScene::PlayScene(int level)
     });
 
     InitalGame();//初始化游戏
+
+    manegeLable();//初始化标签
+
+}
+void PlayScene::manegeLable(){
+    //金钱标签
+    moneylable->setText(QString::number(this->money));
+    moneylable->setGeometry(150,15,50,50);
+    QFont ft("Microsoft YaHei");
+    ft.setPixelSize(25);
+    ft.setBold(true);
+    moneylable->setFont(ft);
+    QPalette pa;
+    pa.setColor(QPalette::WindowText,Qt::yellow);
+    moneylable->setPalette(pa);
+
+    //敌人波数标签
+    QString str1=QString("第 %1 / %2 波怪物").arg(this->wave).arg(this->totalwave);
+    wavelable->setText(str1);
+    QFont ft1("Microsoft YaHei");
+    ft1.setPixelSize(20);
+    ft1.setBold(true);
+    wavelable->setGeometry(SIZEwid/2-100,15,250,50);
+    wavelable->setFont(ft1);
+    wavelable->setPalette(pa);
+
+    //玩家生命值标签
+    playerlable->setText(QString::number(this->playerhp));
+    playerlable->setGeometry(SIZEwid-90,15,50,50);
+    playerlable->setFont(ft);
+    playerlable->setPalette(pa);
 
 }
 void PlayScene::mousePressEvent(QMouseEvent *event){

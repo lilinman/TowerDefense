@@ -31,11 +31,12 @@ void PlayScene::DrawEnemy(QPainter& painter)
     //qDebug()<<"执行画敌人";
     if(EnemyVec.empty())
         return;
-    for(auto e=EnemyVec.begin();e!=EnemyVec.end();e++)
+    for(auto e:EnemyVec)
     {
-        (*e)->Draw(painter);
+        e->Draw(painter);
+
         if(!update_bullet)
-               (*e)->Move();        
+               e->Move();
     }
 }
 
@@ -49,6 +50,7 @@ void PlayScene::DrawBullet(QPainter& painter){
 
 void PlayScene::DrawMapArr(QPainter& painter)
 {
+
     painter.drawPixmap(0, 0,SIZEwid,SIZEhei,
         QPixmap(":/pics/imgs/背景.png"));
     //地图数组

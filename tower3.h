@@ -7,7 +7,7 @@ class Tower3:public BaseTower
 public:
     Tower3(int,int);
     void upGrade();
-    void attack();
+    void attack(vector<Enemy *>);
     void set_Bullet(int,int,bool);
     ~Tower3();
 };

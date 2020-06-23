@@ -8,7 +8,7 @@ TowerPos:: TowerPos(Point p):Object(p.x,p.y),selectbox(new Selection(get_Cpoint(
       myTower=NULL;
 
 }
-void TowerPos::Draw(QPainter &painter) const{
+void TowerPos::Draw(QPainter &painter){
     painter.drawPixmap(position_x, position_y, width, height,
         QPixmap(ImgPath));
 

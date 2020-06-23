@@ -10,6 +10,7 @@
 #include<vector>
 #include<QString>
 #include<iostream>
+#include <QMediaPlayer>
 using namespace std;
 #include"enemy.h"
 #include"basetower.h"
@@ -38,6 +39,7 @@ protected:
     void paintEvent(QPaintEvent *);
 
 public:
+    QMediaPlayer *bgm0 = new QMediaPlayer;
     ChooseLevelScene *ChooseScene = NULL;//设置选择场景指针
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();

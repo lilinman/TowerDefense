@@ -19,10 +19,16 @@ MainWindow::MainWindow(QWidget *parent) :
         this->close();
     });
 
+    //播放背景音乐
+    QMediaPlayer *bgm0 = new QMediaPlayer;
+    bgm0->setMedia(QUrl("qrc:/sound/sound/bgm1.mp3"));
+    bgm0->setVolume(15);
+    bgm0->play();
+
     //开始按钮
-    MyPushButton *startButton= new MyPushButton(80,80,":/pics/imgs/草莓.png");
+    MyPushButton *startButton= new MyPushButton(400,200,":/pics/imgs/play按钮.png");
     startButton->setParent(this);
-    startButton->move(this->width()*0.5-80,this->height()*0.7);
+    startButton->move(this->width()*0.5-(startButton->width()/2)-20,this->height()*0.7);
 
     //选择关卡场景
     ChooseScene = new ChooseLevelScene;
@@ -33,6 +39,10 @@ MainWindow::MainWindow(QWidget *parent) :
          this->show();
     });
 
+    connect(ChooseScene,&ChooseLevelScene::StopMuisc,this,[=](){
+        bgm0->pause();
+    });
+
     connect(startButton,&MyPushButton::clicked,[=]{
         //弹起特效
         startButton->zoom1();
@@ -41,7 +51,6 @@ MainWindow::MainWindow(QWidget *parent) :
             //隐藏自己 显示选择关卡场景、
             this->hide();
             ChooseScene->show();
-
         });
     });
 
@@ -60,6 +69,6 @@ void MainWindow::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing);    //设置抗锯齿
 
     painter.drawPixmap(0, 0, imgSIZE*per_WIDTH, imgSIZE*per_HEIGHT,
-        QPixmap(":/pics/imgs/背景.png"));
+        QPixmap(":/pics/imgs/界面1.png"));
 
 }

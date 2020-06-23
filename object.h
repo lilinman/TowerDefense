@@ -5,7 +5,8 @@
 #include<QPainter>
 
 //物体抽象类
-class Object{
+class Object
+{
 
 protected:
     int position_x,position_y;//位置坐标
@@ -20,7 +21,7 @@ public:
     QString get_Imgpath() const;
     void set_Imgpath(QString s) ;
     void set_WH(int a,int b);
-    virtual void Draw(QPainter &painter) const =0;//纯虚函数
+    virtual void Draw(QPainter &painter) =0;//纯虚函数
     virtual ~Object();
 
 };

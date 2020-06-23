@@ -2,6 +2,7 @@
 #define CHOOSELEVELSCENE_H
 
 #include <QMainWindow>
+
 #include "playscene.h"
 class ChooseLevelScene : public QMainWindow
 {
@@ -12,6 +13,7 @@ public:
     PlayScene *GameScene = NULL;
 signals:
     //返回信号
+    void StopMuisc();
     void chooseBack();
 public slots:
 };

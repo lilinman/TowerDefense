@@ -16,13 +16,13 @@ Bullet::Bullet(int x,int y,int id,Enemy *t)
         set_Imgpath(":/pics/imgs/芒果.png");
         break;
     case 31:
-        set_WH(30,30);
-        set_Imgpath(":/pics/imgs/西瓜.png");
+        set_WH(0,0);
+        set_Imgpath(":/pics/imgs/冰淇淋攻击效果.png");
         break;
     }
     
 }
-void Bullet::Move()
+void Bullet::Move(double d)
 {
     if(target==NULL)
         return;
@@ -32,32 +32,30 @@ void Bullet::Move()
 
     if(ex==position_x){
         if(ey<position_y){
-            position_y -= 15;
+            position_y -= (int)d;
         }
         else
-            position_y+=15;
+            position_y+=(int)d;
         return;
     }
 
     direction=qAtan((double)(position_y-ey)
                               /(position_x-ex));
     if(ex<position_x){
-        position_x -= (int) (qCos(direction) * 20);
-        position_y -= (int) (qSin(direction) * 20);
+        position_x -= (int) (qCos(direction) * d);
+        position_y -= (int) (qSin(direction) * d);
 
     }
     if(ex>position_x){
-        position_x += (int) (qCos(direction) * 20);
-        position_y += (int) (qSin(direction) * 20);
+        position_x += (int) (qCos(direction) * d);
+        position_y += (int) (qSin(direction) * d);
     }
     return;
 }
 
-void Bullet::Draw(QPainter &painter) const{
+void Bullet::Draw(QPainter &painter){
     painter.drawPixmap(position_x, position_y, width, height,
                        QPixmap(ImgPath));
-    if(target!=NULL)
-         painter.drawRect(target->get_X(),target->get_Y(),90,90);
 }
 
 bool Bullet::shoot()

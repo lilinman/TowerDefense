@@ -15,6 +15,10 @@
 void PlayScene::InitalGame(){
 //实现不同关卡初始化
 //防御塔坑 怪物路径vector
+    money=320;
+    totalwave=5;
+    wave=1;
+    count=-2;
     vector<Point> towerPosition={
         Point(5,10),
         Point(1,8),Point(13,9),
@@ -30,8 +34,18 @@ void PlayScene::InitalGame(){
     }
 
 }
+bool PlayScene::spendMoney(int n){
+    if(n<=money){
+        money-=n;
+        moneylable->setText(QString::number(this->money));
+        return true;
+    }
+    else
+        return false;
+}
+
 void PlayScene::Checkenemy(){
-    //qDebug()<<"执行Checkenemy";
+
     for(auto e =EnemyVec.begin();e!=EnemyVec.end();e++)
     {
         if((*e)->get_Hp()<=0){
@@ -47,8 +61,11 @@ void PlayScene::Checkenemy(){
                     bt->set_Target(NULL);
                 }
             }
+            //金钱变化
+            money+=10;
+            moneylable->setText(QString::number(this->money));//刷新金币
             delete (*e);
-            EnemyVec.erase(e);
+            EnemyVec.erase(e);          
             if(e==EnemyVec.end()) break;
         }
         //以后对生命值减少进行优化
@@ -66,6 +83,8 @@ void PlayScene::CheckTower(){
 
     for(auto e =TowerVec.begin();e!=TowerVec.end();e++){
          if((*e)->get_Hp()<=0){
+             money+=20;
+             moneylable->setText(QString::number(this->money));//刷新金币
              delete (*e);
              TowerVec.erase(e);
              if(e==TowerVec.end()) break;
@@ -84,17 +103,17 @@ bool PlayScene::CreatTower(int mx,int my)
         if(tp->get_selectbox()->get_isshow()&&tp->get_hasTower())//有选择框 有塔 选择升级或删塔
         {
             int id=tp->get_selectbox()->checkbox(mx,my);  //选择框循环 返回选择结果
-            if(id==2) //点击升级
+            if(id==2)                                     //点击升级
             {
-                tp->get_myTower()->upGrade();//防御塔升级
+                tp->get_myTower()->upGrade();            //防御塔升级
             }
             if(id==4){
-               //遍历防御塔删除对应塔
+                                                          //遍历防御塔删除对应塔
                 tp->get_myTower()->set_Hp(0);
                 tp->set_hasTower(false);//无塔
                 tp->set_myTower(NULL);
             }
-            tp->get_selectbox()->set_isshow(false);//选择框消失
+            tp->get_selectbox()->set_isshow(false);         //选择框消失
             return true;
         }
 
@@ -186,12 +205,69 @@ void PlayScene::CreatEnemyWave(){
 
     Point startpoint(4*positionSIZE,46*positionSIZE);//起点
 
-    if(count>=0&&count<=5)
-        CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,1);
-     if(count>=6&&count<=12)
-        CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,2);
+    if(EnemyVec.empty()&&count>0&&count>=totalCount)//如果敌人为空 则下一波 是最后一波时显示游戏胜利
+    {
+        if(wave!=totalwave){
+            wave++;
+             QString str1=QString("第 %1 / %2 波怪物").arg(this->wave).arg(this->totalwave);
+            wavelable->setText(str1);//刷新波数
+            count=-2;
+        }
+        else
+            inGame=0;
+    }
 
-     count++;
+    switch (wave) {
+    case 1:
+        totalCount=5;
+        if(count>=0&&count<=5){
+            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,1);
+        }
+        break;
+    case 2:
+        totalCount=8;
+        if(count>=0&&count<=4){
+            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,1);
+        }
+        if(count>=5&&count<=8){
+            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,2);
+        }
+        break;
+    case 3:
+        totalCount=10;
+        if(count>=0&&count<=5){
+            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,3);
+        }
+        if(count>=5&&count<=10){
+            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,4);
+        }
+        break;
+    case 4:
+        totalCount=12;
+        if(count>=0&&count<=5){
+            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,3);
+        }
+        if(count>=5&&count<=12){
+            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,4);
+        }
+        break;
+    case 5:
+        totalCount=14;
+        if(count>=0&&count<=4){
+            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,1);
+        }
+        if(count>=5&&count<=10){
+            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,2);
+        }
+        if(count>=10&&count<=14){
+            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,4);
+        }
+        break;
+    default:
+        break;
+    }
+
+    count++;
 
  }
 
@@ -207,7 +283,7 @@ void PlayScene::Tower_creatbullet()
          int ex=tower->get_X()+tower->get_Width()/2;//防御塔中心点坐标
          int ey=tower->get_Y()+tower->get_Height()/2;
 
-         if (tower->get_Target()!=NULL)   //目标敌人为空
+         if (tower->get_Target()!=NULL)   //目标敌人不为空
          {
              int px=tower->get_Target()->get_X()+tower->get_Target()->get_Width()/2;//敌人中心点坐标
              int py=tower->get_Target()->get_Y()+tower->get_Target()->get_Height()/2;
@@ -217,7 +293,7 @@ void PlayScene::Tower_creatbullet()
          }
 
          if(tower->get_Target()==NULL){
-             if(!EnemyVec.empty())//不为空就寻找最近的敌人
+             if(!EnemyVec.empty())      //不为空就寻找最近的敌人
              for(auto enemy:EnemyVec)
              {
                  int flag=0;
@@ -234,7 +310,7 @@ void PlayScene::Tower_creatbullet()
                          tower->set_Bullet(ex,ey,true);//新建子弹
                      break;
                  }
-                 if(!flag){//如果攻击范围内没有敌人，消去子弹
+                 if(!flag){                       //如果攻击范围内没有敌人，消去子弹
                      delete tower->get_Bullet();
                      tower->set_Bullet(ex,ey,false);//设置为NULL
                  }
@@ -243,7 +319,7 @@ void PlayScene::Tower_creatbullet()
          //现在目标敌人不为空，攻击
          if(tower->get_Bullet()!=NULL)
          {
-             tower->attack();
+             tower->attack(EnemyVec);
          }
      }
 

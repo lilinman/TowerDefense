@@ -1,34 +1,42 @@
 <RCC>
     <qresource prefix="/pics">
+        <file>imgs/play按钮.png</file>
+        <file>imgs/白球.png</file>
+        <file>imgs/背景.png</file>
+        <file>imgs/冰冻效果.png</file>
+        <file>imgs/冰淇淋攻击效果.png</file>
         <file>imgs/草莓.png</file>
+        <file>imgs/地砖.jpg</file>
+        <file>imgs/地砖2.jpg</file>
+        <file>imgs/地砖3.png</file>
+        <file>imgs/地砖4.png</file>
+        <file>imgs/粉色云.png</file>
         <file>imgs/怪兽1.png</file>
         <file>imgs/怪兽2.png</file>
         <file>imgs/怪兽3.png</file>
         <file>imgs/怪兽4.png</file>
-        <file>imgs/芒果.png</file>
-        <file>imgs/西瓜.png</file>
-        <file>imgs/樱桃.png</file>
-        <file>imgs/白球.png</file>
-        <file>imgs/地砖.jpg</file>
-        <file>imgs/地砖2.jpg</file>
-        <file>imgs/地砖4.png</file>
-        <file>imgs/地砖3.png</file>
-        <file>imgs/背景.png</file>
+        <file>imgs/界面1.png</file>
         <file>imgs/蓝色云.png</file>
         <file>imgs/蓝色云2.png</file>
-        <file>imgs/热气球.png</file>
-        <file>imgs/粉色云.png</file>
+        <file>imgs/芒果.png</file>
         <file>imgs/炮塔1.1.png</file>
         <file>imgs/炮塔1.2.png</file>
         <file>imgs/炮塔1.3.png</file>
+        <file>imgs/炮塔1待买.png</file>
         <file>imgs/炮塔2.1.png</file>
         <file>imgs/炮塔2.2.png</file>
         <file>imgs/炮塔2.3.png</file>
         <file>imgs/炮塔2待买.png</file>
         <file>imgs/炮塔3.1.png</file>
         <file>imgs/炮塔3.2.png</file>
-        <file>imgs/炮塔3.3.png</file>
         <file>imgs/炮塔3待买.png</file>
-        <file>imgs/炮塔1待买.png</file>
+        <file>imgs/热气球.png</file>
+        <file>imgs/塔3效果.png</file>
+        <file>imgs/西瓜.png</file>
+        <file>imgs/樱桃.png</file>
+    </qresource>
+    <qresource prefix="/sound">
+        <file>sound/bgm0.mp3</file>
+        <file>sound/bgm1.mp3</file>
     </qresource>
 </RCC>

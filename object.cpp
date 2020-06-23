@@ -1,6 +1,6 @@
 #include "object.h"
 #include<QDebug>
-Object::Object(int x, int y):position_x(x),position_y(y){}
+Object::Object(int x, int y): position_x(x),position_y(y){}
 
 int Object::get_Height() const{
     return height;

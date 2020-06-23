@@ -48,13 +48,15 @@ ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
 
                 //创建游戏场景
                 this->hide();//自己隐藏
+                emit StopMuisc();
                 GameScene = new PlayScene(i+1);
                 GameScene->show();
 
                 //监听游戏页面信号
                 connect(GameScene,&PlayScene::chooseBacklevel,this,[=](){
                     this->show();
-                    GameScene->close();
+                    delete GameScene;
+                    GameScene=NULL;
                 });
 
             });

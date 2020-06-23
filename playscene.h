@@ -27,13 +27,22 @@ private:
     vector<TowerPos *> TposVec;     //防御塔坑数组
     bool inGame=true;
     int playerhp=10;
+    QLabel *playerlable= new QLabel(this);
     int a=10;
     int count = 0;    //敌人计数器
+    int totalCount=0;
     int timerId1; //第1个时间控制器，刷新
     int timerId2; //第2个 产生敌人
     int timerId3; //第3个 产生子弹
     bool update_bullet;
+    int money;
+    QLabel *moneylable= new QLabel(this);
+    int wave=0;
+    QLabel *wavelable= new QLabel(this);
+    int totalwave;
 protected:
+    void manegeLable();
+    bool spendMoney(int);//金币判断
     void DrawTowerpos(QPainter&);
     void Checkenemy();
     void CheckTower();

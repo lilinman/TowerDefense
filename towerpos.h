@@ -15,7 +15,7 @@ private:
     Selection* selectbox;
 
 public:
-     void Draw(QPainter &painter) const;
+     void Draw(QPainter &painter);
     int get_X() const;
     int get_Y() const;
     Point get_Cpoint()const;

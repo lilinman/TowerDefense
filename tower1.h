@@ -9,7 +9,7 @@ public:
     Tower1(int x,int y);
     //实现虚函数
     void upGrade();
-    void attack();
+    void attack(vector<Enemy *>);
     void set_Bullet(int,int,bool);
     ~Tower1();
 };
