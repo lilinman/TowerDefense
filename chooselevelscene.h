@@ -14,6 +14,7 @@ public:
 signals:
     //返回信号
     void StopMuisc();
+    void PlayMuisc();
     void chooseBack();
 public slots:
 };

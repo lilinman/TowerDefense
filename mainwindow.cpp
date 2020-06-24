@@ -20,10 +20,12 @@ MainWindow::MainWindow(QWidget *parent) :
     });
 
     //播放背景音乐
-    QMediaPlayer *bgm0 = new QMediaPlayer;
-    bgm0->setMedia(QUrl("qrc:/sound/sound/bgm1.mp3"));
-    bgm0->setVolume(15);
-    bgm0->play();
+    QMediaPlayer *bgm1 = new QMediaPlayer;
+    bgm1->setMedia(QUrl("qrc:/sound/sound/bgm1.mp3"));
+    bgm1->setVolume(15);
+    bgm1->play();
+
+
 
     //开始按钮
     MyPushButton *startButton= new MyPushButton(400,200,":/pics/imgs/play按钮.png");
@@ -40,13 +42,23 @@ MainWindow::MainWindow(QWidget *parent) :
     });
 
     connect(ChooseScene,&ChooseLevelScene::StopMuisc,this,[=](){
-        bgm0->pause();
+        bgm1->pause();
+    });
+
+    connect(ChooseScene,&ChooseLevelScene::PlayMuisc,this,[=](){
+        bgm1->play();
     });
 
     connect(startButton,&MyPushButton::clicked,[=]{
         //弹起特效
         startButton->zoom1();
         startButton->zoom2();
+
+        QMediaPlayer *button1 = new QMediaPlayer;
+        button1->setMedia(QUrl("qrc:/sound/sound/Button4.mp3"));
+        button1->setVolume(80);
+        button1->play();
+
         QTimer::singleShot(300,this,[=]{ //延时
             //隐藏自己 显示选择关卡场景、
             this->hide();

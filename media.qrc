@@ -22,21 +22,59 @@
         <file>imgs/炮塔1.1.png</file>
         <file>imgs/炮塔1.2.png</file>
         <file>imgs/炮塔1.3.png</file>
-        <file>imgs/炮塔1待买.png</file>
         <file>imgs/炮塔2.1.png</file>
         <file>imgs/炮塔2.2.png</file>
         <file>imgs/炮塔2.3.png</file>
-        <file>imgs/炮塔2待买.png</file>
         <file>imgs/炮塔3.1.png</file>
         <file>imgs/炮塔3.2.png</file>
-        <file>imgs/炮塔3待买.png</file>
         <file>imgs/热气球.png</file>
         <file>imgs/塔3效果.png</file>
         <file>imgs/西瓜.png</file>
         <file>imgs/樱桃.png</file>
+        <file>imgs/顶级.png</file>
+        <file>imgs/可升级.png</file>
+        <file>imgs/炮塔1.1不可升级.png</file>
+        <file>imgs/炮塔1.1拆塔.png</file>
+        <file>imgs/炮塔1.1可升级.png</file>
+        <file>imgs/炮塔1.2不可升级.png</file>
+        <file>imgs/炮塔1.2拆塔.png</file>
+        <file>imgs/炮塔1.2可升级.png</file>
+        <file>imgs/炮塔1.3拆塔.png</file>
+        <file>imgs/炮塔1不可买.png</file>
+        <file>imgs/炮塔1可买.png</file>
+        <file>imgs/炮塔2.1不可升级.png</file>
+        <file>imgs/炮塔2.1拆塔.png</file>
+        <file>imgs/炮塔2.1可升级.png</file>
+        <file>imgs/炮塔2.2不可升级.png</file>
+        <file>imgs/炮塔2.2拆塔.png</file>
+        <file>imgs/炮塔2.2可升级.png</file>
+        <file>imgs/炮塔2.3拆塔.png</file>
+        <file>imgs/炮塔2不可买.png</file>
+        <file>imgs/炮塔2可买.png</file>
+        <file>imgs/炮塔3不可买.png</file>
+        <file>imgs/炮塔3可买.png</file>
+        <file>imgs/炮塔3.3.png</file>
     </qresource>
     <qresource prefix="/sound">
         <file>sound/bgm0.mp3</file>
         <file>sound/bgm1.mp3</file>
+        <file>sound/bgm2.mp3</file>
+        <file>sound/Bullet1.mp3</file>
+        <file>sound/Bullet2.mp3</file>
+        <file>sound/Button1.mp3</file>
+        <file>sound/Button2.mp3</file>
+        <file>sound/enemy1.mp3</file>
+        <file>sound/enemy2.mp3</file>
+        <file>sound/enemy3.mp3</file>
+        <file>sound/fire1.mp3</file>
+        <file>sound/ISbullet2.mp3</file>
+        <file>sound/soldTower.mp3</file>
+        <file>sound/success.mp3</file>
+        <file>sound/upgrade.mp3</file>
+        <file>sound/Button3.mp3</file>
+        <file>sound/Button4.mp3</file>
+        <file>sound/butTower.mp3</file>
+        <file>sound/Button5.mp3</file>
+        <file>sound/Button6.mp3</file>
     </qresource>
 </RCC>

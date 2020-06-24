@@ -9,6 +9,7 @@ public:
     void upGrade();
     void attack(vector<Enemy *>);
     void set_Bullet(int,int,bool);
+    void bulletingSound();
     ~Tower2();
 
 private:

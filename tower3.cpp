@@ -5,6 +5,7 @@
 #include<flowerbullet.h>
 Tower3::Tower3(int x,int y):BaseTower(x,y)
 {
+    price =180;
     double rate=1.8;
     TowerLevel=1;
     bulletspeed=15;
@@ -13,9 +14,18 @@ Tower3::Tower3(int x,int y):BaseTower(x,y)
     range=120;
     set_WH(rate*imgSIZE,rate*imgSIZE);
     set_Imgpath(":/pics/imgs/炮塔3.1.png");
+    upgradePath=":/pics/imgs/炮塔2.1可升级.png";
+    NOupgradePath=":/pics/imgs/炮塔2.1不可升级.png";
+    sellPath=":/pics/imgs/炮塔2.1拆塔.png";
 
 }
 
+void Tower3::bulletingSound(){
+    QMediaPlayer *player = new QMediaPlayer;
+    player->setMedia(QUrl("qrc:/sound/sound/fire1.mp3"));
+    player->setVolume(2);
+    player->play();
+}
 void Tower3::upGrade()
 {
     if(TowerLevel==3) //顶级退出
@@ -26,9 +36,13 @@ void Tower3::upGrade()
         damege=15;
         range=180;
         set_Imgpath(":/pics/imgs/炮塔3.2.png");
+        upgradePath=":/pics/imgs/炮塔2.2可升级.png";
+        NOupgradePath=":/pics/imgs/炮塔2.2不可升级.png";
+        sellPath=":/pics/imgs/炮塔2.2拆塔.png";
         TowerLevel++;
         break;
     case 2:
+        sellPath=":/pics/imgs/炮塔2.3拆塔.png";
         damege=20;
         range=220;
         set_Imgpath(":/pics/imgs/炮塔3.3.png");
@@ -36,12 +50,14 @@ void Tower3::upGrade()
     default:
         break;
     }
+    QMediaPlayer *player = new QMediaPlayer;
+    player->setMedia(QUrl("qrc:/sound/sound/upgrade.mp3"));
+    player->setVolume(25);
+    player->play();
+
 
 }
 void Tower3::attack(vector<Enemy *> EnemyVec){
-    if(bullet->get_target()==NULL)
-        return;
-
 
     bullet->Move(ebuspeed);
 
@@ -79,7 +95,9 @@ void Tower3::set_Bullet(int ex,int ey,bool b){
 
     if(b){
         ebuspeed=range/bulletspeed;
-        bullet = new flowerBullet(ex,ey,bulletId,target); //子弹类型不同
+        set_isbulleting(true);
+        this->set_WH(this->get_Width(),this->get_Height()+5);
+        bullet = new flowerBullet(ex,ey,bulletId,NULL); //子弹类型不同
     }
     else
         bullet=NULL;

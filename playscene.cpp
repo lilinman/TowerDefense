@@ -18,6 +18,10 @@ PlayScene::PlayScene(int level)
     timerId2 = startTimer(1500);
     timerId3 = startTimer(50);
 
+    QMediaPlayer *bgm = new QMediaPlayer;
+    bgm->setMedia(QUrl("qrc:/sound/sound/bgm2.mp3"));
+    bgm->setVolume(5);
+
     //返回按钮
     MyPushButton *backButton= new MyPushButton(40,40,":/pics/imgs/草莓.png");
     backButton->setParent(this);
@@ -26,6 +30,8 @@ PlayScene::PlayScene(int level)
         //弹起特效
         backButton->zoom1();
         backButton->zoom2();
+
+        bgm->pause();
         QTimer::singleShot(200,this,[=]{
             emit chooseBacklevel();
         });
@@ -35,11 +41,13 @@ PlayScene::PlayScene(int level)
 
     manegeLable();//初始化标签
 
+    bgm->play();
+
 }
 void PlayScene::manegeLable(){
     //金钱标签
     moneylable->setText(QString::number(this->money));
-    moneylable->setGeometry(150,15,50,50);
+    moneylable->setGeometry(150,15,200,50);
     QFont ft("Microsoft YaHei");
     ft.setPixelSize(25);
     ft.setBold(true);
@@ -79,9 +87,9 @@ void PlayScene::paintEvent(QPaintEvent *)
     QPainter painter(this);     //创建画家类
     painter.setRenderHint(QPainter::Antialiasing);    //设置抗锯齿
     DrawMapArr(painter);        //画出地图
+    DrawEnemy(painter);
     DrawTowerpos(painter);
     DrawTower(painter);
-    DrawEnemy(painter);
     DrawBullet(painter);
 
 }

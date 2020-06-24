@@ -14,6 +14,7 @@ void BaseTower::Draw(QPainter& painter){
                            QPixmap(ImgPath));
         this->set_WH(this->get_Width(),this->get_Height()-5);
         isbulleting=false;
+        bulletingSound();//播放音频
     }
 
     else{
@@ -75,7 +76,30 @@ void BaseTower::set_isbulleting(bool b){
 bool BaseTower::get_isbulleting()const{
     return isbulleting;
 }
-
+int BaseTower::get_SellPrice()const{
+    return sellPrice;
+}
+int BaseTower::get_UpgradePrice()const{
+    return upgradePrice;
+}
+QString BaseTower::get_upPath() const{
+    return upgradePath;
+}
+QString BaseTower::get_NoupPath() const{
+    return NOupgradePath;
+}
+QString BaseTower::get_sellPath() const{
+    return sellPath;
+}
+int BaseTower::get_Price()const{
+    return price;
+}
+bool BaseTower::get_ShowUpgrade()const{
+    return showUpgrade;
+}
+void BaseTower::set_ShowUpgrade(bool b){
+    showUpgrade=b;
+}
 BaseTower::~BaseTower(){
     //qDebug()<<"删除BaseTower";
 }

@@ -22,6 +22,10 @@ ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
         this->close();
     });
 
+
+
+
+
     MyPushButton *backButton= new MyPushButton(80,80,":/pics/imgs/草莓.png");
     backButton->setParent(this);
     backButton->move(800,400);
@@ -29,10 +33,20 @@ ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
         //弹起特效
         backButton->zoom1();
         backButton->zoom2();
+
+        QMediaPlayer *button2 = new QMediaPlayer;
+        button2->setMedia(QUrl("qrc:/sound/sound/Button3.mp3"));
+        button2->setVolume(50);
+        button2->play();
+
         QTimer::singleShot(300,this,[=]{
             emit chooseBack();
         });
     });
+
+
+
+
 
     //创建选择关卡按钮
     for(int i=0;i<3;i++){
@@ -44,8 +58,13 @@ ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
         connect(menuButton,&MyPushButton::clicked,[=](){
             menuButton->zoom1();
             menuButton->zoom2();
-            QTimer::singleShot(300,this,[=]{ //延时
 
+            QMediaPlayer *button1 = new QMediaPlayer;
+            button1->setMedia(QUrl("qrc:/sound/sound/Button4.mp3"));
+            button1->setVolume(80);
+            button1->play();
+
+            QTimer::singleShot(300,this,[=]{ //延时
                 //创建游戏场景
                 this->hide();//自己隐藏
                 emit StopMuisc();
@@ -55,6 +74,7 @@ ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
                 //监听游戏页面信号
                 connect(GameScene,&PlayScene::chooseBacklevel,this,[=](){
                     this->show();
+                    emit PlayMuisc();
                     delete GameScene;
                     GameScene=NULL;
                 });

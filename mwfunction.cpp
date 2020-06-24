@@ -13,8 +13,8 @@
 #include"tower2.h"
 #include"tower3.h"
 void PlayScene::InitalGame(){
-//实现不同关卡初始化
-//防御塔坑 怪物路径vector
+    //实现不同关卡初始化
+    //防御塔坑 怪物路径vector
     money=320;
     totalwave=5;
     wave=1;
@@ -65,7 +65,7 @@ void PlayScene::Checkenemy(){
             money+=10;
             moneylable->setText(QString::number(this->money));//刷新金币
             delete (*e);
-            EnemyVec.erase(e);          
+            EnemyVec.erase(e);
             if(e==EnemyVec.end()) break;
         }
         //以后对生命值减少进行优化
@@ -81,20 +81,28 @@ void PlayScene::Checkenemy(){
 
 void PlayScene::CheckTower(){
 
+    //qDebug()<<"执行checktower";
     for(auto e =TowerVec.begin();e!=TowerVec.end();e++){
-         if((*e)->get_Hp()<=0){
-             money+=20;
-             moneylable->setText(QString::number(this->money));//刷新金币
-             delete (*e);
-             TowerVec.erase(e);
-             if(e==TowerVec.end()) break;
-         }
+        if((*e)->get_Hp()<=0){
+            money+=(*e)->get_SellPrice();                     //拆塔
+            moneylable->setText(QString::number(this->money));//刷新金币
+
+            QMediaPlayer *player = new QMediaPlayer;          //拆塔音效
+            player->setMedia(QUrl("qrc:/sound/sound/soldTower.mp3"));
+            player->setVolume(30);
+            player->play();
+
+            delete (*e);
+            TowerVec.erase(e);
+            if(e==TowerVec.end()) break;
+        }
     }
+    //qDebug()<<"执行完checktower";
 }
 
 bool PlayScene::CreatTower(int mx,int my)
 {
-     //qDebug()<<"执行CreatTower";
+    //qDebug()<<"执行CreatTower";
     //遍历防御塔坑位置 创造防御塔
     for(auto tp:TposVec){
 
@@ -108,12 +116,14 @@ bool PlayScene::CreatTower(int mx,int my)
                 tp->get_myTower()->upGrade();            //防御塔升级
             }
             if(id==4){
-                                                          //遍历防御塔删除对应塔
+
                 tp->get_myTower()->set_Hp(0);
                 tp->set_hasTower(false);//无塔
                 tp->set_myTower(NULL);
             }
             tp->get_selectbox()->set_isshow(false);         //选择框消失
+            if(tp->get_myTower()!=NULL)
+                tp->get_myTower()->set_ShowUpgrade(true);       //显示可否升级
             return true;
         }
 
@@ -121,22 +131,29 @@ bool PlayScene::CreatTower(int mx,int my)
         {
             int id=tp->get_selectbox()->checkbox(mx,my);  //选择框循环 返回选择结果
             switch (id) {
-            case 1:                                        //创造防御塔1
-               tower = new Tower1(tp->get_X()+3,tp->get_Y()-5);
+            case 1:                                       //创造防御塔1
+                tower = new Tower1(tp->get_X()+3,tp->get_Y()-5);
                 break;
-            case 2:
-               tower = new Tower2(tp->get_X()+3,tp->get_Y()-5);
+            case 2:                                       //创造防御塔2
+                tower = new Tower2(tp->get_X()+3,tp->get_Y()-5);
                 break;
-            case 3:
-               tower = new Tower3(tp->get_X()+3,tp->get_Y()-5);
+            case 3:                                       //创造防御塔3
+                tower = new Tower3(tp->get_X()+3,tp->get_Y()-5);
             default:
                 break;
             }
-            if(id!=0&&id!=4) {                            //创建了防御塔 添到序列
+            if(id>=1&&id<=3&&spendMoney(tower->get_Price())) {  //价钱足够创建了防御塔 添到序列
                 TowerVec.push_back(tower);
                 tp->set_hasTower(true);                   //设置坑位有塔
                 //qDebug()<<"has tower";
                 tp->set_myTower(TowerVec.back());         //设置坑位的塔
+
+
+                QMediaPlayer *player = new QMediaPlayer;
+                player->setMedia(QUrl("qrc:/sound/sound/butTower.mp3"));
+                player->setVolume(30);
+                player->play();
+
             }
             tp->get_selectbox()->set_isshow(false);
             return true;
@@ -147,7 +164,13 @@ bool PlayScene::CreatTower(int mx,int my)
                 &&(!tp->get_hasTower())                      //没有塔
                 &&(!tp->get_selectbox()->get_isshow()))      //没有选择框
         {
-             //qDebug()<<"1 pattern";
+            QMediaPlayer *player = new QMediaPlayer;
+            player->setMedia(QUrl("qrc:/sound/sound/Button6.mp3"));
+            player->setVolume(200);
+            player->play();
+
+
+            //qDebug()<<"1 pattern";
             tp->get_selectbox()->set_pattern(1);             //设置模式为1购买模式
             for(auto tp1:TposVec)                            //以防出现遍历的先后造成选择框显示错误问题
                 if(tp1->get_selectbox()->get_isshow())
@@ -163,7 +186,13 @@ bool PlayScene::CreatTower(int mx,int my)
                 &&tp->get_hasTower()                        //有塔
                 &&!tp->get_selectbox()->get_isshow())       //没有选择框
         {
+            QMediaPlayer *player = new QMediaPlayer;
+            player->setMedia(QUrl("qrc:/sound/sound/Button6.mp3"));
+            player->setVolume(200);
+            player->play();
+
             //qDebug()<<"2 pattern";
+            tp->get_myTower()->set_ShowUpgrade(false);      //不显示是否升级
             tp->get_selectbox()->set_pattern(2);            //模式为2 升级或删除模式
             for(auto tp1:TposVec)                            //以防出现遍历的先后造成选择框显示错误问题
                 if(tp1->get_selectbox()->get_isshow())
@@ -188,20 +217,20 @@ void PlayScene::CreatEnemyWave(){
     int pathNUM=12;
     Point  Path[]={
 
-                    Point(13*positionSIZE,46*positionSIZE),//第二个节点
-                    Point(13*positionSIZE,30*positionSIZE),//第三个节点
-                    Point(28*positionSIZE,30*positionSIZE),
-                    Point(28*positionSIZE,46*positionSIZE),//第四个节点
-                    Point(44*positionSIZE,46*positionSIZE),//第五个节点
-                    Point(44*positionSIZE,6*positionSIZE),//第六个节点
-                    Point(60*positionSIZE,6*positionSIZE),//第七个节点
-                    Point(60*positionSIZE,46*positionSIZE),//8
-                    Point(76*positionSIZE,46*positionSIZE),//9
-                    Point(76*positionSIZE,30*positionSIZE),//10
-                    Point(92*positionSIZE,30*positionSIZE),//11
-                    Point(92*positionSIZE,46*positionSIZE),//11
-                    Point(104*positionSIZE,46*positionSIZE),//11
-                   };
+        Point(13*positionSIZE,46*positionSIZE),//第二个节点
+        Point(13*positionSIZE,30*positionSIZE),//第三个节点
+        Point(28*positionSIZE,30*positionSIZE),
+        Point(28*positionSIZE,46*positionSIZE),//第四个节点
+        Point(44*positionSIZE,46*positionSIZE),//第五个节点
+        Point(44*positionSIZE,6*positionSIZE),//第六个节点
+        Point(60*positionSIZE,6*positionSIZE),//第七个节点
+        Point(60*positionSIZE,46*positionSIZE),//8
+        Point(76*positionSIZE,46*positionSIZE),//9
+        Point(76*positionSIZE,30*positionSIZE),//10
+        Point(92*positionSIZE,30*positionSIZE),//11
+        Point(92*positionSIZE,46*positionSIZE),//11
+        Point(104*positionSIZE,46*positionSIZE),//11
+    };
 
     Point startpoint(4*positionSIZE,46*positionSIZE);//起点
 
@@ -209,7 +238,7 @@ void PlayScene::CreatEnemyWave(){
     {
         if(wave!=totalwave){
             wave++;
-             QString str1=QString("第 %1 / %2 波怪物").arg(this->wave).arg(this->totalwave);
+            QString str1=QString("第 %1 / %2 波怪物").arg(this->wave).arg(this->totalwave);
             wavelable->setText(str1);//刷新波数
             count=-2;
         }
@@ -269,59 +298,59 @@ void PlayScene::CreatEnemyWave(){
 
     count++;
 
- }
+}
 
 void PlayScene::Tower_creatbullet()
- {
-     if(TowerVec.empty())
-         return;
+{
+    if(TowerVec.empty())
+        return;
 
-     //qDebug()<<"执行Tower_creatbullet";
+    //qDebug()<<"执行Tower_creatbullet";
 
-     for(auto tower:TowerVec)
-     {
-         int ex=tower->get_X()+tower->get_Width()/2;//防御塔中心点坐标
-         int ey=tower->get_Y()+tower->get_Height()/2;
+    for(auto tower:TowerVec)
+    {
+        int ex=tower->get_X()+tower->get_Width()/2;//防御塔中心点坐标
+        int ey=tower->get_Y()+tower->get_Height()/2;
 
-         if (tower->get_Target()!=NULL)   //目标敌人不为空
-         {
-             int px=tower->get_Target()->get_X()+tower->get_Target()->get_Width()/2;//敌人中心点坐标
-             int py=tower->get_Target()->get_Y()+tower->get_Target()->get_Height()/2;
-             //在范围外
-             if((ex-px)*(ex-px)+(ey-py)*(ey-py)>tower->get_Range()*tower->get_Range())//判断是否在范围内
-                 tower->set_Target(NULL);
-         }
+        if (tower->get_Target()!=NULL)   //目标敌人不为空
+        {
+            int px=tower->get_Target()->get_X()+tower->get_Target()->get_Width()/2;//敌人中心点坐标
+            int py=tower->get_Target()->get_Y()+tower->get_Target()->get_Height()/2;
+            //在范围外
+            if((ex-px)*(ex-px)+(ey-py)*(ey-py)>tower->get_Range()*tower->get_Range())//判断是否在范围内
+                tower->set_Target(NULL);
+        }
 
-         if(tower->get_Target()==NULL){
-             if(!EnemyVec.empty())      //不为空就寻找最近的敌人
-             for(auto enemy:EnemyVec)
-             {
-                 int flag=0;
-                 int px=enemy->get_X()+enemy->get_Width()/2;//敌人中心点坐标
-                 int py=enemy->get_Y()+enemy->get_Height()/2;
+        if(tower->get_Target()==NULL){
+            if(!EnemyVec.empty())      //不为空就寻找最近的敌人
+                for(auto enemy:EnemyVec)
+                {
+                    int flag=0;
+                    int px=enemy->get_X()+enemy->get_Width()/2;//敌人中心点坐标
+                    int py=enemy->get_Y()+enemy->get_Height()/2;
 
-                 //在攻击范围内
-                 if((ex-px)*(ex-px)+(ey-py)*(ey-py)<=tower->get_Range()*tower->get_Range())
-                 {
+                    //在攻击范围内
+                    if((ex-px)*(ex-px)+(ey-py)*(ey-py)<=tower->get_Range()*tower->get_Range())
+                    {
 
-                     tower->set_Target(enemy);//设置防御塔的目标敌人
-                     flag=1;
-                     if(tower->get_Bullet()==NULL)//如果现在子弹为空 新建子弹及子弹目标敌人
-                         tower->set_Bullet(ex,ey,true);//新建子弹
-                     break;
-                 }
-                 if(!flag){                       //如果攻击范围内没有敌人，消去子弹
-                     delete tower->get_Bullet();
-                     tower->set_Bullet(ex,ey,false);//设置为NULL
-                 }
-             }
-         }
-         //现在目标敌人不为空，攻击
-         if(tower->get_Bullet()!=NULL)
-         {
-             tower->attack(EnemyVec);
-         }
-     }
+                        tower->set_Target(enemy);//设置防御塔的目标敌人
+                        flag=1;
+                        if(tower->get_Bullet()==NULL)//如果现在子弹为空 新建子弹及子弹目标敌人
+                            tower->set_Bullet(ex,ey,true);//新建子弹
+                        break;
+                    }
+                    if(!flag){                       //如果攻击范围内没有敌人，消去子弹
+                        delete tower->get_Bullet();
+                        tower->set_Bullet(ex,ey,false);//设置为NULL
+                    }
+                }
+        }
+        //现在目标敌人不为空，攻击
+        if(tower->get_Bullet()!=NULL)
+        {
+            tower->attack(EnemyVec);
+        }
+    }
 
-     Checkenemy();//检查敌人
+    Checkenemy();//检查敌人
 }
