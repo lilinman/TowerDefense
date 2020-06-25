@@ -21,7 +21,8 @@ private:
     bool isAttacked=false;        //是否被攻击
     bool isAttackedBy3=false;     //是否被3号塔攻击
 public:
-    Enemy(Point pointar[],int len,int x,int y,int id);
+    Enemy(vector<Point> pointar,int x,int y,int id);
+    int get_Price()const;
     bool get_isAttacked()const;
     void set_isAttacked(bool);
     int get_Ohp()const;

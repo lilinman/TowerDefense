@@ -2,10 +2,9 @@
 #include<QDebug>
 #include<QPropertyAnimation>
 #include <QMouseEvent>  //鼠标事件
-MyPushButton::MyPushButton(int wid,int he,QString normalImg,QString pressImg){
+MyPushButton::MyPushButton(int wid,int he,QString normalImg){
 
     this->normalImgPath = normalImg;
-    this->pressImgPath  = pressImg;
 
     QPixmap pix;
     bool ret = pix.load(normalImg);
@@ -15,7 +14,7 @@ MyPushButton::MyPushButton(int wid,int he,QString normalImg,QString pressImg){
     }
 
     //设置图片固定大小
-    this->setFixedSize(pix.width(),pix.height());
+    this->setFixedSize(wid,he);
     //设置不规则图片的样式
     this->setStyleSheet("QPushButton{border:0px;}");
     //设置图标
@@ -51,4 +50,24 @@ void MyPushButton::zoom2(){
     animation->start();
 }
 
+void MyPushButton::setPath(int wid,int he,QString s ){
+    normalImgPath=s;
+
+    QPixmap pix;
+    bool ret = pix.load(s);
+    if(!ret){
+        qDebug()<<"图片加载失败";
+        return;
+    }
+
+    //设置图片固定大小
+    this->setFixedSize(wid,he);
+    //设置不规则图片的样式
+    this->setStyleSheet("QPushButton{border:0px;}");
+    //设置图标
+    this->setIcon(pix);
+    //设置图标大小
+    this->setIconSize(QSize(wid,he));
+
+}
 

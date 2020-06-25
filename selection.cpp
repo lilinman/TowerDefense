@@ -55,6 +55,7 @@ void Selection::Draw2(QPainter &painter,BaseTower *tower,int money) const{
     else {
         p1.load(tower->get_NoupPath());
     }
+
     p2.load(tower->get_sellPath());
 
     painter.drawPixmap(box[1].x-imgSIZE, box[1].y-imgSIZE ,2*imgSIZE,2*imgSIZE,p1);

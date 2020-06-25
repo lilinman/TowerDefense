@@ -1,6 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
+#include<QMediaPlaylist>
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
@@ -21,16 +21,17 @@ MainWindow::MainWindow(QWidget *parent) :
 
     //播放背景音乐
     QMediaPlayer *bgm1 = new QMediaPlayer;
-    bgm1->setMedia(QUrl("qrc:/sound/sound/bgm1.mp3"));
+    QMediaPlaylist *gameList = new QMediaPlaylist;//播放列表
+    gameList->addMedia(QUrl("qrc:/sound/sound/bgm1.mp3"));
+    gameList->setPlaybackMode(QMediaPlaylist::CurrentItemInLoop);
+    bgm1->setPlaylist(gameList);
     bgm1->setVolume(15);
     bgm1->play();
 
-
-
     //开始按钮
-    MyPushButton *startButton= new MyPushButton(400,200,":/pics/imgs/play按钮.png");
+    MyPushButton *startButton= new MyPushButton(400,300,":/pics/imgs/play按钮.png");
     startButton->setParent(this);
-    startButton->move(this->width()*0.5-(startButton->width()/2)-20,this->height()*0.7);
+    startButton->move(this->width()*0.5-(startButton->width()/2)-25,this->height()*0.55);
 
     //选择关卡场景
     ChooseScene = new ChooseLevelScene;
@@ -60,9 +61,10 @@ MainWindow::MainWindow(QWidget *parent) :
         button1->play();
 
         QTimer::singleShot(300,this,[=]{ //延时
-            //隐藏自己 显示选择关卡场景、
-            this->hide();
+            //隐藏自己 显示选择关卡场景
             ChooseScene->show();
+            this->hide();
+
         });
     });
 
@@ -82,5 +84,7 @@ void MainWindow::paintEvent(QPaintEvent *)
 
     painter.drawPixmap(0, 0, imgSIZE*per_WIDTH, imgSIZE*per_HEIGHT,
         QPixmap(":/pics/imgs/界面1.png"));
+
+
 
 }

@@ -12,28 +12,7 @@
 #include"tower1.h"
 #include"tower2.h"
 #include"tower3.h"
-void PlayScene::InitalGame(){
-    //实现不同关卡初始化
-    //防御塔坑 怪物路径vector
-    money=320;
-    totalwave=5;
-    wave=1;
-    count=-2;
-    vector<Point> towerPosition={
-        Point(5,10),
-        Point(1,8),Point(13,9),
-        Point(9,7),Point(17,7),
-        Point(9,10),Point(17,10),
-        Point(13,4),Point(21,10),Point(25,8)
-    };
-    //初始化塔坑
-    for(auto tp=towerPosition.begin();tp!=towerPosition.end();tp++)
-    {
-        TposVec.push_back(new TowerPos(Point(tp->x*imgSIZE,tp->y*imgSIZE)));
 
-    }
-
-}
 bool PlayScene::spendMoney(int n){
     if(n<=money){
         money-=n;
@@ -62,16 +41,17 @@ void PlayScene::Checkenemy(){
                 }
             }
             //金钱变化
-            money+=10;
+            money+=(*e)->get_Price();
             moneylable->setText(QString::number(this->money));//刷新金币
             delete (*e);
             EnemyVec.erase(e);
             if(e==EnemyVec.end()) break;
         }
-        //以后对生命值减少进行优化
+
         else if((*e)->getway().empty())
         {//怪物到达终点
-            playerhp--;
+            playerhp--;       //生命值减少
+            playerlable->setText(QString::number(this->playerhp));//刷新金币
             delete (*e);
             EnemyVec.erase(e);
             if(e==EnemyVec.end()) break;
@@ -113,10 +93,17 @@ bool PlayScene::CreatTower(int mx,int my)
             int id=tp->get_selectbox()->checkbox(mx,my);  //选择框循环 返回选择结果
             if(id==2)                                     //点击升级
             {
-                tp->get_myTower()->upGrade();            //防御塔升级
+                if(spendMoney(tp->get_myTower()->get_UpgradePrice()))//判断钱是否足够
+                    tp->get_myTower()->upGrade();            //防御塔升级
+                else
+                {
+                    QMediaPlayer *player = new QMediaPlayer;          //错误音乐
+                    player->setMedia(QUrl("qrc:/sound/sound/error.mp3"));
+                    player->setVolume(30);
+                    player->play();
+                }
             }
             if(id==4){
-
                 tp->get_myTower()->set_Hp(0);
                 tp->set_hasTower(false);//无塔
                 tp->set_myTower(NULL);
@@ -142,17 +129,26 @@ bool PlayScene::CreatTower(int mx,int my)
             default:
                 break;
             }
-            if(id>=1&&id<=3&&spendMoney(tower->get_Price())) {  //价钱足够创建了防御塔 添到序列
-                TowerVec.push_back(tower);
-                tp->set_hasTower(true);                   //设置坑位有塔
-                //qDebug()<<"has tower";
-                tp->set_myTower(TowerVec.back());         //设置坑位的塔
+            if(id>=1&&id<=3) {  //价钱足够创建了防御塔 添到序列
+                if(spendMoney(tower->get_Price())){
 
+                    TowerVec.push_back(tower);
+                    tp->set_hasTower(true);                   //设置坑位有塔
+                    //qDebug()<<"has tower";
+                    tp->set_myTower(TowerVec.back());         //设置坑位的塔
+                    QMediaPlayer *player = new QMediaPlayer;
+                    player->setMedia(QUrl("qrc:/sound/sound/butTower.mp3"));
+                    player->setVolume(30);
+                    player->play();
 
-                QMediaPlayer *player = new QMediaPlayer;
-                player->setMedia(QUrl("qrc:/sound/sound/butTower.mp3"));
-                player->setVolume(30);
-                player->play();
+                }
+                else
+                {
+                    QMediaPlayer *player = new QMediaPlayer;          //错误音乐
+                    player->setMedia(QUrl("qrc:/sound/sound/error.mp3"));
+                    player->setVolume(30);
+                    player->play();
+                }
 
             }
             tp->get_selectbox()->set_isshow(false);
@@ -208,31 +204,20 @@ bool PlayScene::CreatTower(int mx,int my)
     return false;
 }
 
-void PlayScene::CreatEnemy(Point waypoint[], int len, int x, int y,int id)
+void PlayScene::CreatEnemy(int id)
 {
-    EnemyVec.push_back(new Enemy(waypoint,len,x,y,id));//新建敌人
+    Point startpoint[3]={                      //起点
+                                               Point(32*positionSIZE,12*positionSIZE),
+                                               Point(13*positionSIZE,30*positionSIZE),
+                                               Point(16*positionSIZE,7*positionSIZE)
+                        };
+
+    EnemyVec.push_back(new Enemy(Path,startpoint[Level-1].x,startpoint[Level-1].y,id));//新建敌人
 }
 
 void PlayScene::CreatEnemyWave(){
-    int pathNUM=12;
-    Point  Path[]={
 
-        Point(13*positionSIZE,46*positionSIZE),//第二个节点
-        Point(13*positionSIZE,30*positionSIZE),//第三个节点
-        Point(28*positionSIZE,30*positionSIZE),
-        Point(28*positionSIZE,46*positionSIZE),//第四个节点
-        Point(44*positionSIZE,46*positionSIZE),//第五个节点
-        Point(44*positionSIZE,6*positionSIZE),//第六个节点
-        Point(60*positionSIZE,6*positionSIZE),//第七个节点
-        Point(60*positionSIZE,46*positionSIZE),//8
-        Point(76*positionSIZE,46*positionSIZE),//9
-        Point(76*positionSIZE,30*positionSIZE),//10
-        Point(92*positionSIZE,30*positionSIZE),//11
-        Point(92*positionSIZE,46*positionSIZE),//11
-        Point(104*positionSIZE,46*positionSIZE),//11
-    };
 
-    Point startpoint(4*positionSIZE,46*positionSIZE);//起点
 
     if(EnemyVec.empty()&&count>0&&count>=totalCount)//如果敌人为空 则下一波 是最后一波时显示游戏胜利
     {
@@ -245,55 +230,124 @@ void PlayScene::CreatEnemyWave(){
         else
             inGame=0;
     }
+    if(Level==1){
+        switch (wave) {
+        case 1:
+            totalCount=4;
+            if(count>=0&&count<=5){
+                CreatEnemy(1);
+            }
+            break;
+        case 2:
+            totalCount=4;
+            if(count>=0&&count<=2){
+                CreatEnemy(1);
+            }
+            if(count>=3&&count<=4){
+                CreatEnemy(2);
+            }
+            break;
+        case 3:
+            totalCount=4;
+            if(count>=0&&count<=3){
+                CreatEnemy(2);
+            }
+            if(count>=3&&count<=4){
+                CreatEnemy(6);
+            }
+            break;
+        default:
+            break;
+        }
+    }
+    if(Level==2)
+    {
+        switch (wave) {
+        case 1:
+            totalCount=4;
+            if(count>=0&&count<=4){
+                CreatEnemy(5);
+            }
+            break;
+        case 2:
+            totalCount=4;
+            if(count>=0&&count<=2){
+                CreatEnemy(1);
+            }
+            if(count>=3&&count<=4){
+                CreatEnemy(6);
+            }
+            break;
+        case 3:
+            totalCount=4;
+            if(count>=0&&count<=3){
+                CreatEnemy(2);
+            }
+            if(count>=3&&count<=4){
+                CreatEnemy(6);
+            }
+        case 4:
+            totalCount=6;
+            if(count>=0&&count<=3){
+                CreatEnemy(7);
+            }
+            if(count>=3&&count<=4){
+                CreatEnemy(8);
+            }
+            break;
+        default:
+            break;
+        }
+    }
+        if(Level==3)
+        {
+            switch (wave) {
+            case 1:
+                totalCount=4;
+                if(count>=0&&count<=2){
+                    CreatEnemy(1);
+                }
+                if(count>=3&&count<=4){
+                    CreatEnemy(6);
+                }
+                break;
+            case 2:
+                totalCount=4;
+                if(count>=0&&count<=2){
+                    CreatEnemy(2);
+                }
+                if(count>=3&&count<=4){
+                    CreatEnemy(7);
+                }
+                break;
+            case 3:
+                totalCount=6;
+                if(count>=0&&count<=3){
+                    CreatEnemy(3);
+                }
+                if(count>=3&&count<=6){
+                    CreatEnemy(8);
+                }
+                break;
+            case 4:
+                totalCount=7;
+                if(count>=0&&count<=3){
+                    CreatEnemy(4);
+                }
+                if(count>=3&&count<=7){
+                    CreatEnemy(9);
+                }
+                break;
+            case 5:
+                totalCount=3;
+                if(count>=0&&count<=3){
+                    CreatEnemy(10);
+                }
+                break;
 
-    switch (wave) {
-    case 1:
-        totalCount=5;
-        if(count>=0&&count<=5){
-            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,1);
-        }
-        break;
-    case 2:
-        totalCount=8;
-        if(count>=0&&count<=4){
-            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,1);
-        }
-        if(count>=5&&count<=8){
-            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,2);
-        }
-        break;
-    case 3:
-        totalCount=10;
-        if(count>=0&&count<=5){
-            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,3);
-        }
-        if(count>=5&&count<=10){
-            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,4);
-        }
-        break;
-    case 4:
-        totalCount=12;
-        if(count>=0&&count<=5){
-            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,3);
-        }
-        if(count>=5&&count<=12){
-            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,4);
-        }
-        break;
-    case 5:
-        totalCount=14;
-        if(count>=0&&count<=4){
-            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,1);
-        }
-        if(count>=5&&count<=10){
-            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,2);
-        }
-        if(count>=10&&count<=14){
-            CreatEnemy(Path,pathNUM,startpoint.x,startpoint.y,4);
-        }
-        break;
-    default:
-        break;
+            default:
+                break;
+            }
     }
 
     count++;
@@ -353,4 +407,159 @@ void PlayScene::Tower_creatbullet()
     }
 
     Checkenemy();//检查敌人
+}
+
+void PlayScene::InitalGame(){
+    //实现不同关卡初始化
+    //防御塔坑 怪物路径vector
+
+    int tmpMap1[per_HEIGHT][per_WIDTH]=
+    {
+        // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27
+        /*0*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*1*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*2*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*3*/  0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*4*/  0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*5*/  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 8, 0, 0, 0, 0, 0, 8, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+        /*6*/  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+        /*7*/  0, 0, 0, 0, 1, 1, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 1, 1, 0, 0, 0, 0,
+        /*8*/  0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+        /*9*/  0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+       /*10*/  0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+       /*11*/  0, 0, 0, 0, 1, 1, 8, 0, 0, 0, 8, 0, 0, 8, 0, 0, 8, 0, 0, 0, 8, 0, 1, 1, 0, 0, 6, 0,
+       /*12*/  0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+       /*13*/  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+       /*14*/  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+       /*15*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       /*16*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+       /*17*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+
+    };
+
+
+    int tmpMap2[per_HEIGHT][per_WIDTH]=
+    {
+        // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27
+               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*0*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*1*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*2*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*3*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*4*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 8, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*5*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*6*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0,
+        /*7*/  0, 0, 0, 1, 1, 1, 1, 1, 1, 8, 0, 1, 1, 0, 0, 1, 1, 8, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0,
+        /*8*/  0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0,
+        /*9*/  0, 0, 0, 0, 0, 8, 0, 1, 1, 0, 0, 1, 1, 8, 0, 1, 1, 0, 0, 1, 1, 8, 0, 0, 0, 0, 0, 0,
+        /*10*/  0, 0, 0, 0, 0, 0, 0, 1, 1, 8, 0, 1, 1, 0, 0, 1, 1, 8, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+        /*11*/  0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+        /*12*/  0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+        /*13*/  0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0,
+        /*14*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*15*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*16*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*17*/
+
+    };
+
+    int tmpMap3[per_HEIGHT][per_WIDTH]=
+    {
+        // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27
+               0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*0*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*1*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*2*/  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+        /*3*/  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+        /*4*/  0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 0, 0, 8, 0, 1, 1, 0, 0, 0, 0,
+        /*5*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+        /*6*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+        /*7*/  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 8, 0, 1, 1, 0, 0, 0, 0,
+        /*8*/  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+        /*9*/  0, 0, 0, 0, 1, 1, 8, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+        /*10*/  0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 6, 0,
+        /*11*/  0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 8, 0, 1, 1, 0, 0, 0, 0,
+        /*12*/  0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0,
+        /*13*/  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+        /*14*/  0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0,
+        /*15*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*16*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        /*17*/
+    };
+
+    vector<Point>Path1={
+        Point(32*positionSIZE,18*positionSIZE),
+        Point(16*positionSIZE,18*positionSIZE),
+        Point(16*positionSIZE,50*positionSIZE),
+        Point(88*positionSIZE,50*positionSIZE),
+        Point(88*positionSIZE,18*positionSIZE),
+        Point(72*positionSIZE,18*positionSIZE),
+        Point(72*positionSIZE,12*positionSIZE),
+    };
+
+    vector<Point>Path2={
+        Point(28*positionSIZE,30*positionSIZE),
+        Point(28*positionSIZE,50*positionSIZE),
+        Point(44*positionSIZE,50*positionSIZE),
+        Point(44*positionSIZE,10*positionSIZE),
+        Point(60*positionSIZE,10*positionSIZE),
+        Point(60*positionSIZE,50*positionSIZE),
+        Point(76*positionSIZE,50*positionSIZE),
+        Point(76*positionSIZE,30*positionSIZE),
+        Point(92*positionSIZE,30*positionSIZE),
+    };
+
+    vector<Point>Path3={
+        Point(88*positionSIZE,10*positionSIZE),
+        Point(88*positionSIZE,54*positionSIZE),
+        Point(16*positionSIZE,54*positionSIZE),
+        Point(16*positionSIZE,30*positionSIZE),
+        Point(56*positionSIZE,30*positionSIZE),
+    };
+    switch (Level) {
+    case 1:
+        for (int i = 0; i < per_HEIGHT; i++)
+            for (int j = 0; j < per_WIDTH; j++)
+                Map[i][j]=tmpMap1[i][j];
+        for(auto p:Path1){
+            Path.push_back(p);
+        }
+        money=640;
+        totalwave=3;
+        break;
+    case 2:
+        for (int i = 0; i < per_HEIGHT; i++)
+            for (int j = 0; j < per_WIDTH; j++)
+                Map[i][j]=tmpMap2[i][j];
+        for(auto p:Path2){
+            Path.push_back(p);
+        }
+        money=720;
+        totalwave=4;
+        break;
+    case 3:
+        for (int i = 0; i < per_HEIGHT; i++)
+            for (int j = 0; j < per_WIDTH; j++)
+                Map[i][j]=tmpMap3[i][j];
+        for(auto p:Path3){
+            Path.push_back(p);
+        }
+        money=560;
+        totalwave=5;
+        break;
+    default:
+        break;
+    }
+
+    count=-2;
+    wave=1;
+    //初始化塔坑
+    for (int i = 0; i < per_HEIGHT; i++)
+        for (int j = 0; j < per_WIDTH; j++)
+        {
+            if(Map[i][j]==8)
+                TposVec.push_back(new TowerPos(Point(j*imgSIZE,i*imgSIZE)));
+        }
+
+
 }

@@ -6,6 +6,8 @@
 Tower3::Tower3(int x,int y):BaseTower(x,y)
 {
     price =180;
+    upgradePrice=280;
+    sellPrice=144;
     double rate=1.8;
     TowerLevel=1;
     bulletspeed=15;
@@ -33,6 +35,8 @@ void Tower3::upGrade()
 
     switch (TowerLevel) {
     case 1:
+        upgradePrice=360;
+        sellPrice=368;
         damege=15;
         range=180;
         set_Imgpath(":/pics/imgs/炮塔3.2.png");
@@ -42,6 +46,8 @@ void Tower3::upGrade()
         TowerLevel++;
         break;
     case 2:
+        upgradePrice=0;
+        sellPrice=656;
         sellPath=":/pics/imgs/炮塔2.3拆塔.png";
         damege=20;
         range=220;
@@ -87,7 +93,6 @@ void Tower3::attack(vector<Enemy *> EnemyVec){
             }
         }
     }
-
     return;
 }
 

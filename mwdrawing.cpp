@@ -23,11 +23,10 @@ void PlayScene::DrawTower(QPainter& painter)
 
 }
 
-void PlayScene::DrawTowerpos(QPainter& painter){
-    //qDebug()<<"执行画塔坑";
+void PlayScene::DrawSelectionbox(QPainter& painter){
     for(auto tp:TposVec)
     {
-        tp->Draw(painter);
+
         if(tp->get_selectbox()->get_isshow()){
             if(tp->get_selectbox()->get_pattern()==1)
                 tp->get_selectbox()->Draw1(painter,money);
@@ -38,7 +37,6 @@ void PlayScene::DrawTowerpos(QPainter& painter){
         }
     }
 }
-
 void PlayScene::DrawEnemy(QPainter& painter)
 {
     //qDebug()<<"执行画敌人";
@@ -63,42 +61,92 @@ void PlayScene::DrawBullet(QPainter& painter){
 
 void PlayScene::DrawMapArr(QPainter& painter)
 {
-
-    painter.drawPixmap(0, 0,SIZEwid,SIZEhei,
-                       QPixmap(":/pics/imgs/背景.png"));
-    //地图数组
-    int Map[per_HEIGHT][per_WIDTH] =
-    {// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27
-     /*0*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     /*1*/  0, 0, 0, 0, 0, 0, 0, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 3, 0, 0, 0, 0, 0,
-     /*2*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     /*3*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 4, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     /*4*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 9, 0, 0, 0, 0,
-     /*5*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     /*6*/  0, 0, 0, 0, 0, 9, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     /*7*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     /*8*/  0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0,
-     /*9*/  0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0,
-     /*10*/  0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 6, 0,
-     /*11*/  0, 0, 0, 1, 1, 0, 0, 1, 1, 0, 9, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 1, 1, 0, 0, 0,
-     /*12*/  0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0,
-     /*13*/  0, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0,
-     /*14*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     /*15*/  2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-     /*16*/  0, 2, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 4, 0, 0,
-     /*17*/  0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
-
-    };
-    for (int j = 0; j < per_HEIGHT; j++)
-        for (int i = 0; i < per_WIDTH; i++)
-        {
-            switch (Map[j][i])
+    QString str1=QString(":/pics/imgs/蛋糕%1.png").arg(this->playerhp);
+    Point p(0,0);
+    if(Level==1){
+        painter.drawPixmap(0, 0,SIZEwid,SIZEhei,
+                           QPixmap(":/pics/imgs/关卡1背景.jpg"));
+        for (int j = 0; j < per_HEIGHT; j++)
+            for (int i = 0; i < per_WIDTH; i++)
             {
-            case 1:     /*地面*/
-                painter.drawPixmap(i * imgSIZE, j * imgSIZE, imgSIZE, imgSIZE,
-                                   QPixmap(":/pics/imgs/地砖4.png"));
-                break;
+                switch (Map[j][i])
+                {
+                case 1:     /*地面*/
+                    painter.drawPixmap(i * imgSIZE, j * imgSIZE, imgSIZE-10, imgSIZE-10,
+                                       QPixmap(":/pics/imgs/地砖4.png"));
+                    break;
+                case 8:
+                    painter.drawPixmap(i * imgSIZE+10, j * imgSIZE+10, imgSIZE*2-20, imgSIZE*2-20,
+                                       QPixmap(":/pics/imgs/地砖5.png"));
+                    break;
+                case 9:
+                    p.x=i;
+                    p.y=j;
+                    break;
+                }
             }
-        }
+        painter.drawPixmap(p.x*imgSIZE-10,p.y*imgSIZE-5,imgSIZE*2+10,imgSIZE*2+10,QPixmap(str1));
+    }
+
+    if(Level==2){
+        painter.drawPixmap(0, 0,SIZEwid,SIZEhei,
+                           QPixmap(":/pics/imgs/关卡2背景.jpg"));
+        for (int j = 0; j < per_HEIGHT; j++)
+            for (int i = 0; i < per_WIDTH; i++)
+            {
+                switch (Map[j][i])
+                {
+                case 1:     /*地面*/
+                    painter.drawPixmap(i * imgSIZE, j * imgSIZE, imgSIZE-10, imgSIZE-10,
+                                       QPixmap(":/pics/imgs/地砖6.png"));
+                    break;
+                case 8:
+                    painter.drawPixmap(i * imgSIZE+10, j * imgSIZE+10, imgSIZE*2-20, imgSIZE*2-20,
+                                       QPixmap(":/pics/imgs/地砖7.png"));
+                    break;
+                case 9:
+                    p.x=i;
+                    p.y=j;
+                    break;
+                }
+            }
+        painter.drawPixmap(p.x*imgSIZE,p.y*imgSIZE,imgSIZE*2+30,imgSIZE*2+30,QPixmap(str1));
+    }
+
+    if(Level==3){
+        painter.drawPixmap(0, 0,SIZEwid,SIZEhei,
+                           QPixmap(":/pics/imgs/关卡3背景.jpg"));
+        for (int j = 0; j < per_HEIGHT; j++)
+            for (int i = 0; i < per_WIDTH; i++)
+            {
+                switch (Map[j][i])
+                {
+                case 1:     /*地面*/
+                    painter.drawPixmap(i * imgSIZE, j * imgSIZE, imgSIZE-10, imgSIZE-10,
+                                       QPixmap(":/pics/imgs/地砖4.png"));
+                    break;
+                case 8:
+                    painter.drawPixmap(i * imgSIZE+10, j * imgSIZE+10, imgSIZE*2-20, imgSIZE*2-20,
+                                       QPixmap(":/pics/imgs/地砖8.png"));
+                    break;
+                case 9:
+                    p.x=i;
+                    p.y=j;
+                    break;
+                }
+            }
+        painter.drawPixmap(p.x*imgSIZE,p.y*imgSIZE,imgSIZE*2+30,imgSIZE*2+30,QPixmap(str1));
+    }
+
+    painter.drawPixmap(0,0, SIZEwid , 88,
+                       QPixmap(":/pics/imgs/菜单栏.png"));
+
+    painter.drawPixmap(200,-5, 70 , 70,
+                       QPixmap(":/pics/imgs/金币.png"));
+    painter.drawPixmap(325,7, 48 , 48,
+                       QPixmap(":/pics/imgs/桃心.png"));
+
+
+
 
 }

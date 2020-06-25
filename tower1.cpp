@@ -1,7 +1,7 @@
 #include "tower1.h"
 #include"mainwindow.h"
 #include<QDebug>
-
+#include<QTimer>
 Tower1::Tower1(int x,int y): BaseTower(x,y)
 {
     price=100;
@@ -12,7 +12,7 @@ Tower1::Tower1(int x,int y): BaseTower(x,y)
     TowerLevel=1;
     bulletId=11;
     damege=10;
-    range=100;
+    range=130;
     set_WH(rate*imgSIZE,rate*imgSIZE);
     set_Imgpath(":/pics/imgs/炮塔1.1.png");
     upgradePath=":/pics/imgs/炮塔1.1可升级.png";
@@ -26,6 +26,7 @@ void Tower1::bulletingSound(){
     player->setVolume(20);
     player->play();
 
+
 }
 void Tower1::upGrade()
 {
@@ -34,10 +35,11 @@ void Tower1::upGrade()
 
     switch (TowerLevel) {
     case 1:
+        damege=15;
         upgradePrice=260;
         sellPrice=224;
         bulletspeed=8;
-        range=150;
+        range=160;
         set_Imgpath(":/pics/imgs/炮塔1.2.png");
         upgradePath=":/pics/imgs/炮塔1.2可升级.png";
         NOupgradePath=":/pics/imgs/炮塔1.2不可升级.png";
@@ -45,6 +47,7 @@ void Tower1::upGrade()
         TowerLevel++;
         break;
     case 2:
+        damege=25;
         upgradePrice=0;
         sellPrice=432;
         bulletspeed=7;

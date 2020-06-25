@@ -13,8 +13,8 @@ Tower2::Tower2(int x,int y):BaseTower(x,y)
     bulletId=21;
     cutSpeed=3;
     tarNum=1;
-    damege=5;
-    range=100;
+    damege=8;
+    range=130;
     set_WH(rate*imgSIZE,rate*imgSIZE);
     set_Imgpath(":/pics/imgs/炮塔2.1.png");
     upgradePath=":/pics/imgs/炮塔2.1可升级.png";
@@ -38,10 +38,10 @@ void Tower2::upGrade()
         upgradePrice=360;
         sellPrice=368;
         bulletspeed=9;
-        damege=7;
+        damege=12;
         cutSpeed=5;
         tarNum=2;
-        range=150;
+        range=160;
         set_Imgpath(":/pics/imgs/炮塔2.2.png");
         upgradePath=":/pics/imgs/炮塔2.2可升级.png";
         NOupgradePath=":/pics/imgs/炮塔2.2不可升级.png";
@@ -52,7 +52,7 @@ void Tower2::upGrade()
         upgradePrice=0;
         sellPrice=656;
         bulletspeed=7;
-        damege=10;
+        damege=26;
         cutSpeed=7;
         tarNum=3;
         range=200;

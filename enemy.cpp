@@ -1,16 +1,17 @@
 #include "enemy.h"
 #include<QDebug>
-Enemy::Enemy(Point pointarr[],int len,int x, int y, int id) :
+Enemy::Enemy(vector<Point> pointarr,int x, int y, int id) :
     Object(x,y),id(id)
 
 {
-    for(int i = 0; i < len; i++)     //路径数组
-        waypoint.push_back(pointarr[i]);
-
+    for(auto p:pointarr){
+        waypoint.push_back(p);
+    }
     //确定不同怪物
     switch (id)
     {
     case 1:
+        price=24;
         OriginHp=20;
         Speed=10;
         e_speed=10;
@@ -19,28 +20,85 @@ Enemy::Enemy(Point pointarr[],int len,int x, int y, int id) :
         set_Imgpath(":/pics/imgs/怪兽2.png");
         break;
     case 2:
-        OriginHp=80;
-        hp = 80;
+        price=32;
+        OriginHp=50;
+        hp = 50;
         Speed=10;
         e_speed=10;
         set_WH(70,70);
         set_Imgpath(":/pics/imgs/怪兽1.png");
         break;
     case 3:
-        OriginHp=200;
-        Speed=15;
-        e_speed=15;
-        hp = 200;
+        price=54;
+        OriginHp=80;
+        Speed=13;
+        e_speed=13;
+        hp = 80;
         set_WH(64,64);
         set_Imgpath(":/pics/imgs/怪兽3.png");
         break;
     case 4:
-        OriginHp=300;
-        hp = 300;
+        price=24;
+        OriginHp=150;
+        hp = 150;
         Speed=10;
         e_speed=10;
         set_WH(64,64);
         set_Imgpath(":/pics/imgs/怪兽4.png");
+        break;
+    case 5:
+        price=24;
+        OriginHp=30;
+        hp = 30;
+        Speed=10;
+        e_speed=10;
+        set_WH(64,64);
+        set_Imgpath(":/pics/imgs/怪物1.png");
+        break;
+    case 6:
+        price=38;
+        OriginHp=70;
+        hp = 70;
+        Speed=10;
+        e_speed=10;
+        set_WH(64,64);
+        set_Imgpath(":/pics/imgs/怪物2.png");
+        break;
+    case 7:
+        price=56;
+        OriginHp=200;
+        hp = 200;
+        Speed=15;
+        e_speed=15;
+        set_WH(64,64);
+        set_Imgpath(":/pics/imgs/怪物3.png");
+        break;
+    case 8:
+        price=68;
+        OriginHp=180;
+        hp = 180;
+        Speed=13;
+        e_speed=13;
+        set_WH(80,80);
+        set_Imgpath(":/pics/imgs/怪物4.png");
+        break;
+    case 9:
+        price=128;
+        OriginHp=220;
+        hp = 220;
+        Speed=15;
+        e_speed=15;
+        set_WH(80,80);
+        set_Imgpath(":/pics/imgs/怪物5.png");
+        break;
+    case 10:
+        price=188;
+        OriginHp=250;
+        hp = 250;
+        Speed=15;
+        e_speed=15;
+        set_WH(100,100);
+        set_Imgpath(":/pics/imgs/怪物5.png");
         break;
     default:
         break;
@@ -158,6 +216,9 @@ int Enemy::get_Speed()const{
 }
 int Enemy::get_Ohp()const{
     return OriginHp;
+}
+int Enemy::get_Price()const{
+    return price;
 }
 void Enemy::set_Ohp(int a){
     OriginHp=a;

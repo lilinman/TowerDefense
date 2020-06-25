@@ -15,20 +15,9 @@ ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
     //设置标题
     setWindowTitle("选择关卡");
 
-    QMenuBar *bar=menuBar();
-    QMenu *startMenu = bar->addMenu("开始");
-    QAction * quitAction = startMenu->addAction("退出");
-    connect(quitAction,&QAction::triggered,[=](){
-        this->close();
-    });
-
-
-
-
-
-    MyPushButton *backButton= new MyPushButton(80,80,":/pics/imgs/草莓.png");
+    MyPushButton *backButton= new MyPushButton(60,60,":/pics/imgs/草莓.png");
     backButton->setParent(this);
-    backButton->move(800,400);
+    backButton->move(900,450);
     connect(backButton,&MyPushButton::clicked,[=]{
         //弹起特效
         backButton->zoom1();
@@ -52,7 +41,7 @@ ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
     for(int i=0;i<3;i++){
         MyPushButton *menuButton = new MyPushButton(90,90,":/pics/imgs/芒果.png");
         menuButton->setParent(this);
-        menuButton->move(200+i*180,200);
+        menuButton->move(210+i*260,250);
 
         //监听每个按钮的点击
         connect(menuButton,&MyPushButton::clicked,[=](){
@@ -88,14 +77,25 @@ ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
         label->setFixedSize(menuButton->width()+10,menuButton->height()+10);
         label->setText(QString::number(i+1));
         label->setFont(QFont("Microsoft YaHei",20,75));
-        label->move(200+i*180,200);
+        label->move(210+i*260,245);
         //设置lable上的文字对齐方式
         label->setAlignment(Qt::AlignHCenter | Qt::AlignVCenter );//水平居中和垂直居中
         //设置让鼠标进行穿透
         label->setAttribute((Qt::WA_TransparentForMouseEvents));
     }
+    QPalette pa;
+    pa.setColor(QPalette::WindowText,QColor(245,222,197));
+    QFont ft1("方正粗黑宋简体");
+    ft1.setPixelSize(50);
+    ft1.setBold(true);
 
-
+    QLabel *label = new QLabel;
+    label->setParent(this);
+    label->setFixedSize(400,180);
+    label->setText(QString("选择关卡:"));
+    label->setFont(ft1);
+    label->move(130,60);
+    label->setPalette(pa);
 
 }
 void ChooseLevelScene::paintEvent(QPaintEvent *)
@@ -106,7 +106,12 @@ void ChooseLevelScene::paintEvent(QPaintEvent *)
     painter.setRenderHint(QPainter::Antialiasing);    //设置抗锯齿
 
     painter.drawPixmap(0, 0, imgSIZE*per_WIDTH, imgSIZE*per_HEIGHT,
-        QPixmap(":/pics/imgs/背景.png"));
+        QPixmap(":/pics/imgs/选择关卡背景.jpg"));
+
+    for(int i=0;i<3;i++){
+        painter.drawPixmap(220+i*253, 200, 180, 180,
+            QPixmap(":/pics/imgs/小熊.png"));
+        }
 
 
 //    DrawMapArr(painter);        //画出地图

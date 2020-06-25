@@ -19,21 +19,25 @@ class PlayScene : public QMainWindow
 {
     Q_OBJECT
 public:
-    PlayScene(int level);
+    PlayScene(int Level);
     int Level;
+    int Map[18][28]={{0}};             //总地图
 private:
+    vector<Point> Path;                //路径
     vector<Enemy*> EnemyVec;           //怪物数组
-    vector<BaseTower*> TowerVec;      //防御塔数组
-    vector<TowerPos *> TposVec;     //防御塔坑数组
+    vector<BaseTower*> TowerVec;       //防御塔数组
+    vector<TowerPos *> TposVec;        //防御塔坑数组
     bool inGame=true;
+    bool isPaused=false;
+    bool isDouble=false;
     int playerhp=10;
     QLabel *playerlable= new QLabel(this);
     int a=10;
-    int count = 0;    //敌人计数器
+    int count = 0;                   //敌人计数器
     int totalCount=0;
-    int timerId1; //第1个时间控制器，刷新
-    int timerId2; //第2个 产生敌人
-    int timerId3; //第3个 产生子弹
+    int timerId1;                    //第1个时间控制器，刷新
+    int timerId2;                    //第2个 刷新敌人
+    int timerId3;                    //第3个 刷新子弹
     bool update_bullet;
     int money;
     QLabel *moneylable= new QLabel(this);
@@ -43,7 +47,6 @@ private:
 protected:
     void manegeLable();
     bool spendMoney(int);//金币判断
-    void DrawTowerpos(QPainter&);
     void Checkenemy();
     void CheckTower();
     void InitalGame();//游戏初始化
@@ -57,7 +60,8 @@ protected:
     void DrawTower(QPainter&);
     void DrawMapArr(QPainter&);             //用于画出地图函数
     void DrawBullet(QPainter&);
-    void CreatEnemy(Point waypoint[],int len,int x,int y,int id);
+    void DrawSelectionbox(QPainter&);
+    void CreatEnemy(int id);
 signals:
 
     chooseBacklevel();//返回关卡选择
