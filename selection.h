@@ -11,17 +11,16 @@ public:
     Selection(int,int);
 private:
     int  mx,my;
-    bool isshow;
-    vector<Point> box;//移动路径
-    int range=65;
-    int pattern;
-    int price1=100;
-    int price2=180;
-    int price3=180;
+    bool isshow;      //是否显示
+    vector<Point> box;//四个点的位置
+    int range=65;     //大小
+    int pattern;      //模式1，2
+    int price1=100;   //防御塔1的原价
+    int price2=180;   //防御塔2和3原价
 public:
-    int checkbox(int x,int y);
-    void Draw1(QPainter &painter,int money) const;
-    void Draw2(QPainter &painter,BaseTower *,int money) const;
+    int checkbox(int x,int y);                                //判断点击返回结果
+    void Draw1(QPainter &painter,int money) const;            //画模式1
+    void Draw2(QPainter &painter,BaseTower *,int money) const;//画模式2
     bool get_isshow()const;
     void set_isshow(bool b);
     void set_pattern(int );

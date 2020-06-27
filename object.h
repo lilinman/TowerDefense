@@ -10,9 +10,10 @@ class Object
 
 protected:
     int position_x,position_y;//位置坐标
-    int width,height;    //大小尺寸
-    QString ImgPath;     //图片路径
+    int width,height;         //大小尺寸
+    QString ImgPath;          //图片路径
 public:
+    virtual void Draw(QPainter &painter) =0;//纯虚函数
     Object(int x,int y);
     int get_X() const;
     int get_Y() const;
@@ -21,7 +22,6 @@ public:
     QString get_Imgpath() const;
     void set_Imgpath(QString s) ;
     void set_WH(int a,int b);
-    virtual void Draw(QPainter &painter) =0;//纯虚函数
     virtual ~Object();
 
 };

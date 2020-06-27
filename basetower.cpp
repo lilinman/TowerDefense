@@ -2,27 +2,40 @@
 #include"enemy.h"
 #include"mainwindow.h"
 #include<QDebug>
-//构造函数
+//防御塔抽象类
 BaseTower::BaseTower(int x,int y): Object(x,y){
 
 }
 
 void BaseTower::Draw(QPainter& painter){
 
-    if(isbulleting){
+    if(isbulleting){                                               //实现发射子弹时动画效果
         painter.drawPixmap(position_x, position_y-5, width, height,
                            QPixmap(ImgPath));
         this->set_WH(this->get_Width(),this->get_Height()-5);
         isbulleting=false;
-        bulletingSound();//播放音频
+        bulletingSound();                                          //播放发射子弹音频
     }
 
     else{
         painter.drawPixmap(position_x, position_y, width, height,
                            QPixmap(ImgPath));
     }
+    //画出消失效果
+    if(isdeleted>=1)
+    {
+        QString str=QString(":/pics/imgs/塔效果%1.png").arg(this->isdeleted);
+        painter.drawPixmap(position_x-85, position_y-90, 250, 250,
+                           QPixmap(str));
+        isdeleted++;
+    }
 }
-
+int BaseTower::get_isdeleted()const{
+    return isdeleted;
+}
+void BaseTower::set_isdeleted(int n){
+    isdeleted=n;
+}
 int BaseTower::get_TowerLevel() const{
     return TowerLevel;
 }

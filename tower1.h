@@ -2,7 +2,7 @@
 #define TOWER1_H
 
 #include"basetower.h"
-
+#include<QObject>
 class Tower1:public BaseTower
 {
 public:

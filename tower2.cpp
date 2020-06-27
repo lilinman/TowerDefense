@@ -23,9 +23,9 @@ Tower2::Tower2(int x,int y):BaseTower(x,y)
 
 }
 void Tower2::bulletingSound(){
-    QMediaPlayer *player = new QMediaPlayer;
+
     player->setMedia(QUrl("qrc:/sound/sound/Bullet2.mp3"));
-    player->setVolume(30);
+    player->setVolume(35);
     player->play();
 }
 void Tower2::upGrade()
@@ -41,7 +41,7 @@ void Tower2::upGrade()
         damege=12;
         cutSpeed=5;
         tarNum=2;
-        range=160;
+        range=150;
         set_Imgpath(":/pics/imgs/炮塔2.2.png");
         upgradePath=":/pics/imgs/炮塔2.2可升级.png";
         NOupgradePath=":/pics/imgs/炮塔2.2不可升级.png";
@@ -52,10 +52,10 @@ void Tower2::upGrade()
         upgradePrice=0;
         sellPrice=656;
         bulletspeed=7;
-        damege=26;
+        damege=15;
         cutSpeed=7;
         tarNum=3;
-        range=200;
+        range=180;
         sellPath=":/pics/imgs/炮塔2.3拆塔.png";
         set_Imgpath(":/pics/imgs/炮塔2.3.png");
         TowerLevel++;
@@ -63,10 +63,6 @@ void Tower2::upGrade()
         break;
 
     }
-    QMediaPlayer *player = new QMediaPlayer;
-    player->setMedia(QUrl("qrc:/sound/sound/upgrade.mp3"));
-    player->setVolume(20);
-    player->play();
 
 }
 void Tower2::attack(vector<Enemy *> EnemyVec){
@@ -74,8 +70,21 @@ void Tower2::attack(vector<Enemy *> EnemyVec){
     int ex=get_X()+get_Width()/2;//防御塔中心点坐标
     int ey=get_Y()+get_Height()/2;
 
-    if(bullet->get_target()==NULL)
+    if(bullet==NULL)
+    {
+        for(auto e:EnemyVec)//实现周边敌人减速功能
+        {
+            int px=e->get_X()+e->get_Width()/2;//敌人中心点坐标
+            int py=e->get_Y()+e->get_Height()/2;
+            if((ex-px)*(ex-px)+(ey-py)*(ey-py)>range*range)//在范围内 减速NUM个
+            {
+
+                e->set_espeed(e->get_Speed());//在范围外恢复正常速度
+            }
+        }
         return;
+    }
+
     bullet->Move(ebuspeed);
 
     if(bullet->shoot()||bullet->get_target()->get_Hp()<=0)//如果目标敌人已经没有血也更新

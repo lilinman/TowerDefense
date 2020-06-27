@@ -6,6 +6,7 @@ Selection::Selection(int x,int y)
      mx=x;
      my=y;
      isshow=false;
+     //上下左右的点位置
      box.push_back(Point(x-range,y));
      box.push_back(Point(x,y-range));
      box.push_back(Point(x+range,y));
@@ -13,13 +14,13 @@ Selection::Selection(int x,int y)
 
 }
 void Selection::Draw1(QPainter &painter,int money) const{
-
+   //模式1购买模式 左中右出现待买炮塔
     painter.setPen(QPen(QColor(0, 160, 230), 5));
     painter.setBrush(Qt::NoBrush);
     painter.drawEllipse(QPointF(mx, my-5), range, range);
 
     QPixmap p[3];
-
+    //分辨判断可买还是不可买
     if(money>=price1)
         p[0].load(":/pics/imgs/炮塔1可买.png");
     else
@@ -41,14 +42,16 @@ void Selection::Draw1(QPainter &painter,int money) const{
 
 }
 void Selection::Draw2(QPainter &painter,BaseTower *tower,int money) const{
+    //模式2 升级或拆塔
     painter.setPen(QPen(QColor(0, 160, 230), 2));
-    painter.setBrush(Qt::NoBrush);
-    painter.drawEllipse(QPointF(mx, my), tower->get_Range(), tower->get_Range());//画出攻击范围
+    painter.setBrush(Qt::NoBrush);//避免覆盖情况
+    painter.drawEllipse(QPointF(mx, my), tower->get_Range(), tower->get_Range());   //画出攻击范围
 
     //在上下显示升级或删去防御塔
     QPixmap p1,p2;
     if(tower->get_TowerLevel()==3)
         p1.load(":/pics/imgs/顶级.png");
+    //判断是否可以升级
     else if(tower->get_UpgradePrice()<=money){
         p1.load(tower->get_upPath());
     }
@@ -64,6 +67,7 @@ void Selection::Draw2(QPainter &painter,BaseTower *tower,int money) const{
 
 }
 int Selection::checkbox(int x,int y){
+    //根据点击位置返回id
     Point p(x,y);
     for(int i=0;i<4;i++){
         if(box[i].is_include(p,20)){

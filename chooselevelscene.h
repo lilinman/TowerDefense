@@ -12,7 +12,7 @@ public:
     void paintEvent(QPaintEvent *);//画图事件
     PlayScene *GameScene = NULL;
 signals:
-    //返回信号
+    //发送给上一级的信号
     void StopMuisc();
     void PlayMuisc();
     void chooseBack();

@@ -4,7 +4,7 @@
 #include "mainwindow.h"
 Bullet::Bullet(int x,int y,int id,Enemy *t)
     :Object(x,y),target(t)
-{
+{   //设置三种子弹图片路径
     switch (id)
     {
     case 11: //炮弹1
@@ -22,7 +22,7 @@ Bullet::Bullet(int x,int y,int id,Enemy *t)
     }
     
 }
-void Bullet::Move(double d)
+void Bullet::Move(double d)  //移动子弹d个距离
 {
     if(target==NULL)
         return;
@@ -65,7 +65,7 @@ bool Bullet::shoot()
     Point tarPoint(target->get_X()+target->get_Width()/2,
                    target->get_Y()+target->get_Height()/2);
 
-    if(tarPoint.is_include(Point(position_x,position_y),20))
+    if(tarPoint.is_include(Point(position_x,position_y),20))  //在目标敌人中心点15范围内视为击中
     {
         return true;
     }
@@ -73,7 +73,7 @@ bool Bullet::shoot()
         return false;
 }
 
-bool Bullet::inborder(){
+bool Bullet::inborder(){      //在游戏界面内
     if(position_x>0&&position_x<=SIZEwid&&position_y>0&&position_y<=SIZEhei)
         return true;
     else

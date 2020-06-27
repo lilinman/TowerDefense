@@ -6,6 +6,9 @@
 #include<QTimer>
 #include"mainwindow.h"
 #include"playscene.h"
+
+//各类画图函数实现
+
 void PlayScene::DrawTower(QPainter& painter)
 {
     //qDebug()<<"执行画塔";
@@ -45,8 +48,7 @@ void PlayScene::DrawEnemy(QPainter& painter)
     for(auto e:EnemyVec)
     {
         e->Draw(painter);
-
-        if(!update_bullet)
+        if(!update_bullet&&!isPaused)
             e->Move();
     }
 }
@@ -61,8 +63,12 @@ void PlayScene::DrawBullet(QPainter& painter){
 
 void PlayScene::DrawMapArr(QPainter& painter)
 {
-    QString str1=QString(":/pics/imgs/蛋糕%1.png").arg(this->playerhp);
-    Point p(0,0);
+
+
+    QString str1=QString(":/pics/imgs/蛋糕%1.png").arg(this->playerhp); //终点蛋糕路径
+    Point p(0,0);//终点坐标
+
+    //每个关卡不同
     if(Level==1){
         painter.drawPixmap(0, 0,SIZEwid,SIZEhei,
                            QPixmap(":/pics/imgs/关卡1背景.jpg"));

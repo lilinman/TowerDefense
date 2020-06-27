@@ -6,18 +6,16 @@
 #include<QLabel>
 ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
 {
-    //配置选择关卡信息
     //配置主场景
     move(posX,posY);//窗口位置
     setFixedSize(SIZEwid,SIZEhei);//窗口大小
     //设置图标
     setWindowIcon(QIcon(":/pics/imgs/怪兽2.png"));
-    //设置标题
-    setWindowTitle("选择关卡");
-
+    //返回按钮
     MyPushButton *backButton= new MyPushButton(60,60,":/pics/imgs/草莓.png");
     backButton->setParent(this);
     backButton->move(900,450);
+    //点击返回按钮
     connect(backButton,&MyPushButton::clicked,[=]{
         //弹起特效
         backButton->zoom1();
@@ -25,17 +23,13 @@ ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
 
         QMediaPlayer *button2 = new QMediaPlayer;
         button2->setMedia(QUrl("qrc:/sound/sound/Button3.mp3"));
-        button2->setVolume(50);
+        button2->setVolume(45);
         button2->play();
 
         QTimer::singleShot(300,this,[=]{
             emit chooseBack();
         });
     });
-
-
-
-
 
     //创建选择关卡按钮
     for(int i=0;i<3;i++){
@@ -71,7 +65,7 @@ ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
             });
 
         });
-
+        //标注关卡序号
         QLabel *label = new QLabel;
         label->setParent(this);
         label->setFixedSize(menuButton->width()+10,menuButton->height()+10);
@@ -83,6 +77,7 @@ ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
         //设置让鼠标进行穿透
         label->setAttribute((Qt::WA_TransparentForMouseEvents));
     }
+    //设置字体色号
     QPalette pa;
     pa.setColor(QPalette::WindowText,QColor(245,222,197));
     QFont ft1("方正粗黑宋简体");
@@ -101,7 +96,6 @@ ChooseLevelScene::ChooseLevelScene(QWidget *parent) : QMainWindow(parent)
 void ChooseLevelScene::paintEvent(QPaintEvent *)
 {
 
-
     QPainter painter(this);     //创建画家类
     painter.setRenderHint(QPainter::Antialiasing);    //设置抗锯齿
 
@@ -112,12 +106,5 @@ void ChooseLevelScene::paintEvent(QPaintEvent *)
         painter.drawPixmap(220+i*253, 200, 180, 180,
             QPixmap(":/pics/imgs/小熊.png"));
         }
-
-
-//    DrawMapArr(painter);        //画出地图
-//    DrawTowerpos(painter);
-//    DrawTower(painter);
-//    DrawEnemy(painter);
-//    DrawBullet(painter);
 
 }

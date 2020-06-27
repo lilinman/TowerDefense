@@ -2,6 +2,8 @@
 #define FLOWERBULLET_H
 
 #include<bullet.h>
+
+//太阳花类子弹 继承自Bullet
 class flowerBullet:public Bullet
 {
 public:
